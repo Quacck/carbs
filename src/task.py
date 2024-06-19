@@ -3,7 +3,9 @@ import timeit
 from typing import List
 import pandas as pd
 
-TIME_FACTOR = 5
+# since we only simulate things right now, we dont need to accelerate tasks by 5x
+# as state in the paper
+TIME_FACTOR = 1
 
 waiting_times = None
 average_length = None
@@ -151,7 +153,9 @@ def load_tasks(trace_name:str) -> List[Task]:
     # df = df[:10000]
     #ids = df["id"].unique()
     for id, row in df.iterrows():
-        assert row["length"] >= 300/TIME_FACTOR, "Too short Job"
+        # currently, only jobs longer than an hour are supported because
+        # the jobs are submitted to the cluster on an hour-basis
+        # assert row["length"] >= 300/TIME_FACTOR, "Too short Job"
         tasks.append(Task(id, row["arrival_time"],
                           row["length"], row["cpus"]))
     #assert len(ids) == len(tasks)

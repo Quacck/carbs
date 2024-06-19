@@ -8,6 +8,7 @@ from scheduling import create_scheduler
 from cluster import create_cluster
 import hashlib
 import time
+import os
 
 
 def run_experiment(
@@ -92,6 +93,7 @@ def prepare_experiment(
     reserved_instances: int,
     waiting_times_str: str,
     cluster_partition: str,
+    repeat: bool
 ):
     """Prepare and Run Experiment
 
@@ -106,6 +108,14 @@ def prepare_experiment(
         waiting_times_str (str): waiting times per queue
         cluster_partition (str): used cluster partition (queue), only for slurm experiment.
     """
+
+    file_name = f"results/{cluster_type}/{task_trace}/{scheduling_policy}-{carbon_start_index}-{carbon_policy}-{carbon_trace}-{reserved_instances}-{waiting_times_str}.csv"
+
+    if os.path.exists(file_name):
+        print(f"Skipping Experiments {task_trace} - {carbon_trace}-{scheduling_policy}-{carbon_policy}-{waiting_times_str}, and {reserved_instances} reserved because the results already exists and repeat parameter not set")
+        return
+    
+
     print(
         f"Start Experiments {task_trace} - {carbon_trace}-{scheduling_policy}-{carbon_policy}-{waiting_times_str}, and {reserved_instances} reserved"
     )
@@ -128,7 +138,6 @@ def prepare_experiment(
     )
     results.append(result)
     results = pd.DataFrame(results, columns=["carbon_cost", "dollar_cost"])
-    file_name = f"results/{cluster_type}/{task_trace}/{scheduling_policy}-{carbon_start_index}-{carbon_policy}-{carbon_trace}-{reserved_instances}-{waiting_times_str}.csv"
     results.to_csv(file_name, index=False)
     print(
         f"Finish Experiments {task_trace} - {carbon_trace}-{scheduling_policy}-{carbon_policy}-{waiting_times_str}, and {reserved_instances} reserved"
@@ -212,6 +221,13 @@ def main():
     parser.add_argument(
         "-p", "--cluster-partition", default="queue1", dest="cluster_partition"
     )
+    parser.add_argument(
+        '--repeat', 
+        default=False,
+        dest="repeat",
+        action=argparse.BooleanOptionalAction, 
+        help='Repeat experiments that are saved already')
+
 
     args = parser.parse_args()
     carbon_start_index = []
@@ -230,6 +246,7 @@ def main():
             args.reserved_instances,
             args.waiting_times_str,
             args.cluster_partition,
+            args.repeat
         )
 
 

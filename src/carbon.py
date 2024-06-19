@@ -28,9 +28,8 @@ class CarbonModel():
         df = pd.DataFrame(np.repeat(self.df.values, factor, axis=0), columns=["carbon_intensity_avg"])
         df["carbon_intensity_avg"] /= factor
         model = CarbonModel(self.name, df,self.carbon_start_index, self.carbon_error)
-        return model
+        return model     
         
-
     def __getitem__(self, index):
         return self.df.iloc[index]['carbon_intensity_avg']
 
@@ -39,7 +38,7 @@ def get_carbon_model(carbon_trace:str, carbon_start_index:int, carbon_error="ORA
     df = pd.read_csv(f"src/traces/{carbon_trace}.csv")
     df = df[17544+carbon_start_index:17544+carbon_start_index+720]
     #df = pd.concat([df.copy(), df[:1000].copy()]).reset_index()
-    df = df[["carbon_intensity_avg"]]
+    df = df[["carbon_intensity_avg", "datetime"]]
     df["carbon_intensity_avg"] /= 1000
     c = CarbonModel(carbon_trace, df, carbon_start_index, carbon_error)
     return c
