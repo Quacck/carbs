@@ -12,7 +12,6 @@ import os
 
 
 def run_experiment(
-    cluster_type: str,
     carbon_start_index: int,
     carbon_model: CarbonModel,
     tasks: List[Task],
@@ -26,7 +25,6 @@ def run_experiment(
     """Run Experiments
 
     Args:
-        cluster_type (str): cluster Type
         carbon_start_index (int): carbon trace start time
         scheduling_policy (str): scheduling algorithm
         carbon_policy (str): carbon waiting policy
@@ -43,7 +41,6 @@ def run_experiment(
         f"{carbon_model.name}-{carbon_start_index}-{scheduling_policy}-{carbon_policy}-{waiting_times_str}-{reserved_instances}-{task_trace}-{cluster_partition}".encode()
     ).hexdigest()[:10]
     cluster = create_cluster(
-        cluster_type,
         scheduling_policy,
         carbon_model,
         reserved_instances,
@@ -56,10 +53,6 @@ def run_experiment(
     )
     for i in range(0, carbon_model.df.shape[0]):
         current_time = i
-        if cluster_type == "slurm":
-            current_time = max(i, round(time.time() - cluster.experiment_start))
-            # if current_time != i:
-            #    print(f"Current time = {current_time} with i = {i}")
         while len(tasks) > 0:
             if tasks[0].arrival_time <= current_time:
                 if tasks[0].task_length > 0:
@@ -73,7 +66,7 @@ def run_experiment(
         if len(tasks) == 0 and scheduler.queue.empty() and cluster.done():
             break
     cluster.save_results(
-        cluster_type,
+        "simulation",
         scheduling_policy,
         carbon_policy,
         carbon_model.name,
@@ -84,7 +77,6 @@ def run_experiment(
 
 
 def prepare_experiment(
-    cluster_type: str,
     carbon_start_index: int,
     carbon_trace: str,
     task_trace: str,
@@ -98,7 +90,6 @@ def prepare_experiment(
     """Prepare and Run Experiment
 
     Args:
-        cluster_type (str): cluster Type
         carbon_start_index (int): carbon trace start time
         carbon_trace (str): carbon trace name
         task_trace (str): task trace name
@@ -109,9 +100,9 @@ def prepare_experiment(
         cluster_partition (str): used cluster partition (queue), only for slurm experiment.
     """
 
-    file_name = f"results/{cluster_type}/{task_trace}/{scheduling_policy}-{carbon_start_index}-{carbon_policy}-{carbon_trace}-{reserved_instances}-{waiting_times_str}.csv"
+    file_name = f"results/simulation/{task_trace}/{scheduling_policy}-{carbon_start_index}-{carbon_policy}-{carbon_trace}-{reserved_instances}-{waiting_times_str}.csv"
 
-    if os.path.exists(file_name):
+    if os.path.exists(file_name) and repeat == False:
         print(f"Skipping Experiments {task_trace} - {carbon_trace}-{scheduling_policy}-{carbon_policy}-{waiting_times_str}, and {reserved_instances} reserved because the results already exists and repeat parameter not set")
         return
     
@@ -122,10 +113,9 @@ def prepare_experiment(
     set_waiting_times(waiting_times_str)
     carbon_model = get_carbon_model(carbon_trace, carbon_start_index)
     tasks = load_tasks(task_trace)
-    carbon_model = carbon_model.extend(3600 / TIME_FACTOR)
+    # carbon_model = carbon_model.extend(3600 / TIME_FACTOR)
     results = []
     result = run_experiment(
-        cluster_type,
         carbon_start_index,
         carbon_model,
         tasks,
@@ -157,14 +147,6 @@ def main():
         help="Carbon Trace",
     )
     parser.add_argument(
-        "--cluster-type",
-        default="simulation",
-        type=str,
-        choices=["simulation", "slurm"],
-        dest="cluster_type",
-        help="Cluster Type Interface",
-    )
-    parser.add_argument(
         "-t",
         "--task-trace",
         default="pai_1k",
@@ -194,16 +176,18 @@ def main():
         dest="scheduling_policy",
         choices=[
             "carbon",
-            "carbon-spot",
+            # "carbon-spot",
             "carbon-cost",
-            "carbon-cost-spot",
+            # "carbon-cost-spot",
             "cost",
             "suspend-resume",
-            "suspend-resume-spot",
+            # "suspend-resume-spot",
             "suspend-resume-threshold",
-            "suspend-resume-spot-threshold",
+            # "suspend-resume-spot-threshold",
         ],
     )
+
+    # it'd probably be nicer if this wasn't some abstract index but maybe an iso date or something like that
     parser.add_argument(
         "-i",
         "--start-index",
@@ -237,7 +221,6 @@ def main():
         carbon_starts = [args.start_index]
     for carbon_start_index in carbon_starts:
         prepare_experiment(
-            args.cluster_type,
             carbon_start_index,
             args.carbon_trace,
             args.task_trace,

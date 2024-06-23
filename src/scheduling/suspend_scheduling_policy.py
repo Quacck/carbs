@@ -69,6 +69,9 @@ class SuspendSchedulingPolicy:
         """
         job_length = task.task_length
         task_schedule = [0] * (task.task_length + task.waiting_time)
+        print(len(task_schedule))
+        print(df.shape[0])
+        
         assert len(task_schedule) == df.shape[0]
         remaining_waiting = task.waiting_time
         for i in range(0, len(task_schedule)):
