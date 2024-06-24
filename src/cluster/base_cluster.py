@@ -146,13 +146,17 @@ class BaseCluster(ABC):
             ],
         )
         os.makedirs(f"results/{cluster_type}/{task_trace}/", exist_ok=True)
-        file_name = f"results/{cluster_type}/{task_trace}/details-{scheduling_policy}-{self.carbon_model.carbon_start_index}-{carbon_policy}-{carbon_trace}-{self.total_reserved_instances}-{waiting_times_str}.csv"
+        details_filename = f"{task_trace}/details-{scheduling_policy}-{self.carbon_model.carbon_start_index}-{carbon_policy}-{carbon_trace}-{self.total_reserved_instances}-{waiting_times_str}.csv"
+        file_name = f"results/{cluster_type}/{details_filename}"
+        print(f"Saving details to {file_name}")
         df.to_csv(file_name, index=False)
         runtime_df = pd.DataFrame(self.runtime_allocation, columns=["cpus"])
         runtime_df["time"] = range(self.carbon_model.df.shape[0])
         runtime_df["time"] //= 60
         runtime_df = runtime_df.groupby("time").mean().reset_index()
-        file_name = f"results/{cluster_type}/{task_trace}/runtime-{scheduling_policy}-{self.carbon_model.carbon_start_index}-{carbon_policy}-{carbon_trace}-{self.total_reserved_instances}-{waiting_times_str}.csv"
+        runtime_filename = f"{task_trace}/runtime-{scheduling_policy}-{self.carbon_model.carbon_start_index}-{carbon_policy}-{carbon_trace}-{self.total_reserved_instances}-{waiting_times_str}.csv"
+        file_name = f"results/{cluster_type}/{runtime_filename}"
+        print(f"Saving runtime to {file_name}")
         runtime_df.to_csv(file_name, index=False)
 
     @abstractmethod

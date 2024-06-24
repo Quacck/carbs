@@ -113,7 +113,7 @@ def prepare_experiment(
     set_waiting_times(waiting_times_str)
     carbon_model = get_carbon_model(carbon_trace, carbon_start_index)
     tasks = load_tasks(task_trace)
-    # carbon_model = carbon_model.extend(3600 / TIME_FACTOR)
+    carbon_model = carbon_model.extend(3600 / TIME_FACTOR)
     results = []
     result = run_experiment(
         carbon_start_index,
@@ -128,6 +128,9 @@ def prepare_experiment(
     )
     results.append(result)
     results = pd.DataFrame(results, columns=["carbon_cost", "dollar_cost"])
+    print(
+        f"Saving Results to {file_name}"
+    )
     results.to_csv(file_name, index=False)
     print(
         f"Finish Experiments {task_trace} - {carbon_trace}-{scheduling_policy}-{carbon_policy}-{waiting_times_str}, and {reserved_instances} reserved"

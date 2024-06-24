@@ -25,6 +25,8 @@ class CarbonModel():
         return model
     
     def extend(self, factor):
+        # right now this is not interpolated between sample points, perhaps
+        # chaning this could be cool.
         df = pd.DataFrame(np.repeat(self.df.values, factor, axis=0), columns=["carbon_intensity_avg"])
         df["carbon_intensity_avg"] /= factor
         model = CarbonModel(self.name, df,self.carbon_start_index, self.carbon_error)
@@ -36,9 +38,12 @@ class CarbonModel():
 
 def get_carbon_model(carbon_trace:str, carbon_start_index:int, carbon_error="ORACLE") -> CarbonModel:
     df = pd.read_csv(f"src/traces/{carbon_trace}.csv")
+
+    # 17544 is 2 years
+    # 720 is 24 * 30, so a whole month
     df = df[17544+carbon_start_index:17544+carbon_start_index+720]
     #df = pd.concat([df.copy(), df[:1000].copy()]).reset_index()
-    df = df[["carbon_intensity_avg", "datetime"]]
+    df = df[["carbon_intensity_avg"]]
     df["carbon_intensity_avg"] /= 1000
     c = CarbonModel(carbon_trace, df, carbon_start_index, carbon_error)
     return c

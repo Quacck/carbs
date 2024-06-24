@@ -69,8 +69,6 @@ class SuspendSchedulingPolicy:
         """
         job_length = task.task_length
         task_schedule = [0] * (task.task_length + task.waiting_time)
-        print(len(task_schedule))
-        print(df.shape[0])
         
         assert len(task_schedule) == df.shape[0]
         remaining_waiting = task.waiting_time
@@ -108,6 +106,7 @@ class SuspendSchedulingPolicy:
             start_times = []
             tasks = 0
             i = 0
+            total_execution_time = 0
             while i < len(schedule):
                 if schedule[i] == 0:
                     i += 1
@@ -115,7 +114,12 @@ class SuspendSchedulingPolicy:
                 start = i
                 while i < len(schedule) and schedule[i] == 1:
                     i = i + 1
-                subtask = Task(task.ID, current_time, i - start, task.CPUs)
+                
+                task_length = i - start
+                subtask = Task(task.ID, current_time, task_length, task.CPUs, total_execution_time, task.power_consumption_function)
+                
+                # we need to keep track of how long each task has run so far, so we can properly call the power consumption
+                total_execution_time += task_length
                 if not self.optimal:
                     subtask.task_length_class = task.task_length_class
                 sub_tasks.append(subtask)

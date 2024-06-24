@@ -1,6 +1,6 @@
 from enum import Enum
 import timeit
-from typing import List
+from typing import List, Callable
 import pandas as pd
 
 # since we only simulate things right now, we dont need to accelerate tasks by 5x
@@ -24,7 +24,6 @@ def set_average_length(av_l):
 def set_waiting_times(waiting_times_str: str):
     global waiting_times
     waiting_times = [float(x)*3600/TIME_FACTOR for x in waiting_times_str.split("x")]
-    print(waiting_times)
 
 
 def get_expected_time(task_length_hours: float) -> (int, int, str):
@@ -108,7 +107,7 @@ def classify_resources(x):
 
 
 class Task:
-    def __init__(self, id:int, arrival_time: float, task_length: float, CPUs: int) -> None:
+    def __init__(self, id:int, arrival_time: float, task_length: float, CPUs: int, total_execution_time: int = 0, power_consumption_function: Callable[[int], float] = lambda seconds_since_start: 10) -> None:
         """Task Class
 
         Args:
@@ -116,6 +115,7 @@ class Task:
             arrival_time (float): arrival time
             task_length (float): task length
             CPUs (int): number of CPUs
+            power_consumption_function: function that takes (seconds since beginning of job) and returns energy usage in Wh
         """
         self.ID = id
         self.arrival_time = int(arrival_time)
@@ -128,6 +128,8 @@ class Task:
         self.CPUs_class = classify_resources(self.CPUs)
         self.queue = queue
         self.waiting_time = int(waiting_time)
+        self.total_execution_time = total_execution_time
+        self.power_consumption_function = power_consumption_function
 
 
 def load_tasks(trace_name:str) -> List[Task]:
@@ -157,7 +159,7 @@ def load_tasks(trace_name:str) -> List[Task]:
         # the jobs are submitted to the cluster on an hour-basis
         # assert row["length"] >= 300/TIME_FACTOR, "Too short Job"
         tasks.append(Task(id, row["arrival_time"],
-                          row["length"], row["cpus"]))
+                          row["length"], row["cpus"], total_execution_time=0))
     #assert len(ids) == len(tasks)
     print(f"Loading {trace_name} tasks took {timeit.default_timer()-start}")
     return tasks

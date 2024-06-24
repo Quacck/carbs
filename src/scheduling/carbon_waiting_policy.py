@@ -1,5 +1,6 @@
 from task import Task, TIME_FACTOR
 from carbon import CarbonModel
+import numpy as np
 
 class Schedule:
     def __init__(self, start_time, finish_time, carbon_cost) -> None:
@@ -28,10 +29,24 @@ def compute_carbon_consumption(task: Task, start_time: int, carbon_trace: Carbon
     Returns:
         Schedule: Execution Schedule
     """
+
+    # the unit of the carbon_intensity is gCO₂eq/kWh
     execution_carbon = carbon_trace.df["carbon_intensity_avg"][start_time:start_time +
                                                                task.task_length]
     assert len(execution_carbon) == task.task_length, "Trace is shorter than task"
-    carbon = execution_carbon.sum() * task.CPUs  # 1 watt per core for now
+
+    # in comparison to base GAIA, our jobs now cost a variable amount of energy over
+    # their execution, the amount of energy required at a time is calculated by
+    # the power consumption function.
+
+
+    carbon_times_energy_draw = np.empty_like(execution_carbon)
+    for i in range (execution_carbon.shape[0]):
+        time_in_job = task.total_execution_time + i
+        # should check wether we need the task.CPUs or if they should go into the function anyway
+        carbon_times_energy_draw[i] = task.power_consumption_function(time_in_job) * execution_carbon[i] * task.CPUs
+
+    carbon = carbon_times_energy_draw.sum()
     return Schedule(start_time, start_time + task.task_length, carbon)
 
 
@@ -107,7 +122,7 @@ def average_carbon_slot_waiting(task: Task, carbon_trace: CarbonModel) -> Schedu
         Schedule: Execution Schedule
     """
     common_task = Task(task.ID, task.arrival_time,
-                       task.expected_time, task.CPUs)
+                       task.expected_time, task.CPUs, 0)
     common_schedule = oracle_carbon_slot_waiting(common_task, carbon_trace)
     schedule = compute_carbon_consumption(
         task, common_schedule.start_time, carbon_trace)
@@ -125,7 +140,7 @@ def best_waiting_time(task: Task, carbon_trace) -> Schedule:
         Schedule: Execution Schedule
     """
     common_task = Task(task.ID, task.arrival_time,
-                       task.expected_time, task.CPUs)
+                       task.expected_time, task.CPUs, 0)
     common_schedule = oracle_carbon_slot(common_task, carbon_trace)
     schedule = compute_carbon_consumption(
         task, common_schedule.start_time, carbon_trace)
