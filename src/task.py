@@ -24,7 +24,9 @@ def set_average_length(av_l):
 
 def set_waiting_times(waiting_times_str: str):
     global waiting_times
-    waiting_times = [float(x)*3600/TIME_FACTOR for x in waiting_times_str.split("x")]
+    
+    # convert the waiting time in hours to seconds
+    waiting_times = [float(hour_string)*3600/TIME_FACTOR for hour_string in waiting_times_str.split("x")]
 
 
 def get_expected_time(task_length_hours: float) -> (int, int, str):
