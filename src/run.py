@@ -175,7 +175,7 @@ def main():
     )
     parser.add_argument(
         "--scheduling-policy",
-        default="suspend-resume-spot-threshold",
+        default="suspend-resume-threshold",
         dest="scheduling_policy",
         choices=[
             "carbon",

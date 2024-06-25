@@ -19,6 +19,8 @@ def create_scheduler(cluster: BaseCluster, scheduling_policy: str, carbon_policy
     else:
         raise Exception("Unknown Carbon Policy")
 
+
+    # perhaps a completly unaware option that neiter optimizies for carbon or for cost should be added
     if scheduling_policy == "carbon":
         return SchedulingPolicy(cluster, carbon_model, start_time_policy, True, False, False)
     elif scheduling_policy == "carbon-spot":
