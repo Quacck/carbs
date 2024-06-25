@@ -4,15 +4,17 @@ def get_power_policy(name: str, *args):
     match name:
         case 'constant':
             # this would be the default GAIA job
-            return Staged(dict({0: lambda x: 1}))
+            return lambda x: 1
         case 'constant-2':
-            return Staged(dict({0: lambda x: 2}))
+            return lambda x: 2
         case 'gradually-increasing':
-            return Staged(dict({
-                0: lambda x: 1,
-                1000: lambda x: 2,
-                2000: lambda x: 3,
-                3000: lambda x: 4
-            }))
+            return lambda x: (x % 1000) + 1
+        case 'ml':
+            return periodically_changing
         case _:
             raise ValueError(f"Could not resolve {name} to a job profle")
+
+def periodically_changing(time):
+    period = time % 1000
+    mode = period % 2 # metaphorically, either "training" (0) or "evaluating" (1)
+    return (mode + 1) * 5 # 5 is just some arbitrary multiplier
