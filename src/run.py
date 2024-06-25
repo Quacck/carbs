@@ -210,7 +210,7 @@ def main():
     )
     parser.add_argument(
         '--repeat', 
-        default=False,
+        default=True,
         dest="repeat",
         action=argparse.BooleanOptionalAction, 
         help='Repeat experiments that are saved already')

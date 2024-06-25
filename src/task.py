@@ -2,6 +2,7 @@ from enum import Enum
 import timeit
 from typing import List, Callable
 import pandas as pd
+import power_consumption_profiles as pcp
 
 # since we only simulate things right now, we dont need to accelerate tasks by 5x
 # as state in the paper
@@ -107,7 +108,7 @@ def classify_resources(x):
 
 
 class Task:
-    def __init__(self, id:int, arrival_time: float, task_length: float, CPUs: int, total_execution_time: int = 0, power_consumption_function: Callable[[int], float] = lambda seconds_since_start: 10) -> None:
+    def __init__(self, id:int, arrival_time: float, task_length: float, CPUs: int, total_execution_time: int = 0, power_consumption_function: Callable[[int], float] = lambda seconds_since_start: seconds_since_start) -> None:
         """Task Class
 
         Args:
@@ -155,11 +156,14 @@ def load_tasks(trace_name:str) -> List[Task]:
     # df = df[:10000]
     #ids = df["id"].unique()
     for id, row in df.iterrows():
+        job_name: str = row.get("name", 'constant')
+        power_consumption = pcp.get_power_policy(job_name)
+
         # currently, only jobs longer than an hour are supported because
         # the jobs are submitted to the cluster on an hour-basis
         # assert row["length"] >= 300/TIME_FACTOR, "Too short Job"
         tasks.append(Task(id, row["arrival_time"],
-                          row["length"], row["cpus"], total_execution_time=0))
+                          row["length"], row["cpus"], total_execution_time=0, power_consumption_function=power_consumption))
     #assert len(ids) == len(tasks)
     print(f"Loading {trace_name} tasks took {timeit.default_timer()-start}")
     return tasks

@@ -122,7 +122,7 @@ def average_carbon_slot_waiting(task: Task, carbon_trace: CarbonModel) -> Schedu
         Schedule: Execution Schedule
     """
     common_task = Task(task.ID, task.arrival_time,
-                       task.expected_time, task.CPUs, 0)
+                       task.expected_time, task.CPUs, 0, task.power_consumption_function)
     common_schedule = oracle_carbon_slot_waiting(common_task, carbon_trace)
     schedule = compute_carbon_consumption(
         task, common_schedule.start_time, carbon_trace)
@@ -140,7 +140,7 @@ def best_waiting_time(task: Task, carbon_trace) -> Schedule:
         Schedule: Execution Schedule
     """
     common_task = Task(task.ID, task.arrival_time,
-                       task.expected_time, task.CPUs, 0)
+                       task.expected_time, task.CPUs, 0, task.power_consumption_function)
     common_schedule = oracle_carbon_slot(common_task, carbon_trace)
     schedule = compute_carbon_consumption(
         task, common_schedule.start_time, carbon_trace)
