@@ -7,6 +7,8 @@ def get_power_policy(name: str, *args):
             return lambda x: 1
         case 'constant-2':
             return lambda x: 2
+        case 'linear':
+            return lambda x: x
         case 'gradually-increasing':
             return lambda x: (x % 1000) + 1
         case 'ml':

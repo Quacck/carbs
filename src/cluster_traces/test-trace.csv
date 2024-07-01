@@ -1,6 +1,7 @@
-arrival_time,length,cpus, name
-0,5600.0,1, constant
-0, 1000.0, 1, constant
-500,5600.0,1, constant
-1000,5600.0,1, constant
-1500,8000.0,1, constant
+arrival_time,length,cpus,name
+0,3600.0,1,linear
+10,3600.0,1,linear
+20,3600.0,1,linear
+30,3600.0,1,linear
+40,3600.0,1,linear
+1500,8000.0,1,gradually-increasing

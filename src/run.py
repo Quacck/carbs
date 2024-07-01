@@ -152,7 +152,7 @@ def main():
     parser.add_argument(
         "-t",
         "--task-trace",
-        default="pai_1k",
+        default="test-trace",
         type=str,
         dest="task_trace",
         help="Task Trace",
