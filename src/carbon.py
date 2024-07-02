@@ -41,7 +41,10 @@ def get_carbon_model(carbon_trace:str, carbon_start_index:int, carbon_error="ORA
 
     # 17544 is 2 years
     # 720 is 24 * 30, so a whole month
-    df = df[17544+carbon_start_index:17544+carbon_start_index+720]
+
+    # change this to 720 * 2 for two months, as some traces are longer than a month
+
+    df = df[17544+carbon_start_index:17544+carbon_start_index+(720*2)]
     #df = pd.concat([df.copy(), df[:1000].copy()]).reset_index()
     df = df[["carbon_intensity_avg"]]
     df["carbon_intensity_avg"] /= 1000

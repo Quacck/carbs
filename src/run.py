@@ -51,20 +51,32 @@ def run_experiment(
     scheduler = create_scheduler(
         cluster, scheduling_policy, carbon_policy, carbon_model
     )
-    for i in range(0, carbon_model.df.shape[0]):
-        current_time = i
-        while len(tasks) > 0:
-            if tasks[0].arrival_time <= current_time:
-                if tasks[0].task_length > 0:
-                    scheduler.submit(current_time, tasks[0])
-                del tasks[0]
-            else:
-                break
+
+    for task in tasks:
+        current_time = task.arrival_time
+        print(current_time)
+        scheduler.submit(current_time, task)
+
         with cluster.lock:
             scheduler.execute(current_time)
-        cluster.sleep()
-        if len(tasks) == 0 and scheduler.queue.empty() and cluster.done():
-            break
+        cluster.sleep()    
+
+    #for i in range(0, carbon_model.df.shape[0]):
+    #    print(i)
+    #    current_time = i
+    #    while len(tasks) > 0:
+    #        if tasks[0].arrival_time <= current_time:
+    #            if tasks[0].task_length > 0:
+    #                scheduler.submit(current_time, tasks[0])
+    #            del tasks[0]
+    #        else:
+    #            break
+    #    with cluster.lock:
+    #        scheduler.execute(current_time)
+    #    cluster.sleep()
+    #    if len(tasks) == 0 and scheduler.queue.empty() and cluster.done():
+    #        break
+
     cluster.save_results(
         "simulation",
         scheduling_policy,
@@ -152,7 +164,7 @@ def main():
     parser.add_argument(
         "-t",
         "--task-trace",
-        default="test-trace",
+        default="scorelab",
         type=str,
         dest="task_trace",
         help="Task Trace",

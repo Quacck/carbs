@@ -122,7 +122,7 @@ class Task:
         """
         self.ID = id
         self.arrival_time = int(arrival_time)
-        self.task_length = int(task_length)
+        self.task_length = max(int(task_length), 1)
         self.task_length_class = classify_time(task_length)
         expected_time, waiting_time, queue = get_expected_time(
             self.task_length)
