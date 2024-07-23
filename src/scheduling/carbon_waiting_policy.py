@@ -3,7 +3,7 @@ from carbon import CarbonModel
 import numpy as np
 
 class Schedule:
-    def __init__(self, start_time, finish_time, carbon_cost) -> None:
+    def __init__(self, start_time: int, finish_time: int, carbon_cost: float) -> None:
         assert type(start_time) == int
         assert type(finish_time) == int
 
@@ -11,10 +11,10 @@ class Schedule:
         self.finish_time = finish_time
         self.carbon_cost = carbon_cost
 
-    def actual_start_time(self, current_time):
+    def actual_start_time(self, current_time: int) -> int:
         return current_time + self.start_time
 
-    def actual_finish_time(self, current_time):
+    def actual_finish_time(self, current_time: int) -> int:
         return current_time + self.finish_time
 
 
@@ -61,8 +61,7 @@ def lowest_carbon_slot(task: Task, carbon_trace: CarbonModel) -> Schedule:
         Schedule: Execution Schedule
     """
     if task.waiting_time != 0:
-        start_time = carbon_trace.df[:task.waiting_time + 1]["carbon_intensity_avg"].idxmin(
-        )
+        start_time = int(carbon_trace.df[:task.waiting_time + 1]["carbon_intensity_avg"].idxmin())
     else:
         start_time = 0
     return compute_carbon_consumption(task, start_time, carbon_trace)
@@ -108,6 +107,9 @@ def oracle_carbon_slot_waiting(task: Task, carbon_trace: CarbonModel) -> Schedul
                 CA = s.carbon_cost
         except:
             pass
+
+    if CA is None:
+        raise BaseException('No CA')
     schedule = max(schedules, key=lambda x: (CA - x.carbon_cost)/(x.start_time+ task.task_length))
     return schedule
 
@@ -129,7 +131,7 @@ def average_carbon_slot_waiting(task: Task, carbon_trace: CarbonModel) -> Schedu
     return schedule
 
 
-def best_waiting_time(task: Task, carbon_trace) -> Schedule:
+def best_waiting_time(task: Task, carbon_trace: CarbonModel) -> Schedule:
     """Oracle Best Execution slot that uses the average job length
 
     Args:

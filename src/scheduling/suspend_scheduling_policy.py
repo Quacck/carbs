@@ -1,22 +1,23 @@
-from typing import Callable
 from carbon import CarbonModel
 from task import TIME_FACTOR, Task
-from .carbon_waiting_policy import Schedule
 from queue import PriorityQueue
 from cluster import BaseCluster
+from pandas import DataFrame
+from typing import List
+from __future__ import annotations
 
 
 class QueueObject:
-    def __init__(self, task, max_start_time, priority) -> None:
+    def __init__(self, task: Task, max_start_time: int, priority: int):
         self.task = task
         self.max_start_time = max_start_time
         self.priority = priority
 
-    def __lt__(self, other):
+    def __lt__(self, other: QueueObject) -> bool:
         return self.priority < other.priority
 
-    def __str__(self):
-        return str(self.x)
+    # def __str__(self) -> str:
+    #     return str(self.x)
 
 
 class SuspendSchedulingPolicy:
@@ -24,13 +25,13 @@ class SuspendSchedulingPolicy:
     We refer to this policy in the paper as WaitAwhile.
     """
 
-    def __init__(self, cluster: BaseCluster, carbon_model, optimal) -> None:
-        self.cluster = cluster
+    def __init__(self, cluster: BaseCluster, carbon_model: CarbonModel, optimal: bool) -> None:
+        self.cluster: BaseCluster = cluster
         self.carbon_model: CarbonModel = carbon_model
-        self.queue: PriorityQueue = PriorityQueue()
-        self.optimal = optimal
+        self.queue: PriorityQueue[QueueObject] = PriorityQueue()
+        self.optimal: bool = optimal
 
-    def compute_schedule_optimal(self, carbon_trace, task: Task):
+    def compute_schedule_optimal(self, carbon_trace: DataFrame, task: Task) -> List[int]:
         """Compute Suspend Resume Schedule WaitAwhile Optimal
 
         Args:
@@ -57,7 +58,7 @@ class SuspendSchedulingPolicy:
             job_length -= 1
         return task_schedule
 
-    def compute_schedule_threshold(self, df, task: Task, mean_value):
+    def compute_schedule_threshold(self, df: DataFrame, task: Task, mean_value: float) -> List[int]:
         """Compute Suspend Resume Schedule WaitAwhile Threshold - Ecovisor
 
         Args:
@@ -83,7 +84,7 @@ class SuspendSchedulingPolicy:
         assert job_length == 0
         return task_schedule
 
-    def submit(self, current_time: int, task: Task):
+    def submit(self, current_time: int, task: Task) -> None:
         """Split Task to multiple jobs (suspend-resume) and submit them to GAIA Queue
 
         Args:
@@ -141,13 +142,13 @@ class SuspendSchedulingPolicy:
             print("RealClusterCost: Submit Error")
             raise
 
-    def execute(self, current_time):
+    def execute(self, current_time: int) -> None:
         """Submit ready job/subjob to the simulated or real cluster queue
 
         Args:
             current_time (int): time index
         """
-        queue = PriorityQueue()
+        queue: PriorityQueue[QueueObject] = PriorityQueue()
         while not self.queue.empty():
             queue_object = self.queue.get()
             if current_time >= queue_object.max_start_time:

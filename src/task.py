@@ -1,15 +1,16 @@
 from enum import Enum
 import timeit
-from typing import List, Callable
+from typing import List, Callable, Tuple
 import pandas as pd
 import power_consumption_profiles as pcp
+from typing import Literal
 
 # since we only simulate things right now, we dont need to accelerate tasks by 5x
 # as state in the paper
 TIME_FACTOR = 1
 
-waiting_times = None
-average_length = None
+waiting_times: List[float] = []
+average_length: List[int] = []
 
 
 class TwoQueues(Enum):
@@ -17,19 +18,19 @@ class TwoQueues(Enum):
     Long = 86400/TIME_FACTOR
 
 
-def set_average_length(av_l):
+def set_average_length(av_l: List[int]) -> None:
     global average_length
     average_length = av_l
 
 
-def set_waiting_times(waiting_times_str: str):
+def set_waiting_times(waiting_times_str: str) -> None:
     global waiting_times
     
     # convert the waiting time in hours to seconds
     waiting_times = [float(hour_string)*3600/TIME_FACTOR for hour_string in waiting_times_str.split("x")]
 
 
-def get_expected_time(task_length_hours: float) -> (int, int, str):
+def get_expected_time(task_length_hours: float) -> Tuple[int, float, str]:
     """Get expected time based on task length. It is used to estimate the task length upon arrival.
 
     Args:
@@ -58,7 +59,7 @@ def get_expected_time(task_length_hours: float) -> (int, int, str):
         raise Exception("Not covered")
 
 
-def classify_time(length):
+def classify_time(length: float) -> Literal['0-2', '2-6', '6-12', '12-24', '24-48', '48+']:
     """Map Task length to length class
 
     Args:
@@ -67,22 +68,22 @@ def classify_time(length):
     Returns:
         str: length class
     """    
-    length = length / (3600/TIME_FACTOR)
-    if length <= 2:
+    scaled_length = float(length) / (3600/TIME_FACTOR)
+    if scaled_length <= 2:
         return "0-2"
-    elif length <= 4:
+    elif scaled_length <= 4:
         return "2-6"
-    elif length <= 8:
+    elif scaled_length <= 8:
         return "6-12"
-    elif length <= 16:
+    elif scaled_length <= 16:
         return "12-24"
-    elif length <= 48:
+    elif scaled_length <= 48:
         return "24-48"
     else:
         return "48+"
 
 
-def classify_resources(x):
+def classify_resources(cpus: int) -> str:
     """Map Task resources to resources class
 
     Args:
@@ -91,19 +92,19 @@ def classify_resources(x):
     Returns:
         str: resources class
     """  
-    if x == 1:
+    if cpus == 1:
         return "1"
-    elif x == 2:
+    elif cpus == 2:
         return "2"
-    elif x <= 4:
+    elif cpus <= 4:
         return "3-4"
-    elif x <= 8:
+    elif cpus <= 8:
         return "5-8"
-    elif x <= 16:
+    elif cpus <= 16:
         return "9-16"
-    elif x <= 32:
+    elif cpus <= 32:
         return "17-32"
-    elif x <= 64:
+    elif cpus <= 64:
         return "33-64"
     else:
         return "64+"
@@ -135,7 +136,7 @@ class Task:
         self.power_consumption_function = power_consumption_function
 
 
-def load_tasks(trace_name:str) -> List[Task]:
+def load_tasks(trace_name:str, use_dynamic_power: bool) -> List[Task]:
     """Load Task Trace
 
     Args:
@@ -151,8 +152,10 @@ def load_tasks(trace_name:str) -> List[Task]:
         f"src/cluster_traces/{trace_name}.csv")
     df["arrival_time"]/= TIME_FACTOR
     df["length"]/= TIME_FACTOR
-    av_l = [df[df["length"] <= TwoQueues.Short.value]["length"].mean(
-    ), df[df["length"] >= TwoQueues.Short.value]["length"].mean()]
+    av_l = [
+        df[df["length"] <= TwoQueues.Short.value]["length"].mean(), 
+        df[df["length"] >= TwoQueues.Short.value]["length"].mean()
+    ]
     set_average_length(av_l)
     print(f"{trace_name} average {av_l[1]}")
     # df = df[:10000]

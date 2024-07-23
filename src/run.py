@@ -21,7 +21,7 @@ def run_experiment(
     task_trace: str,
     waiting_times_str: str,
     cluster_partition: str,
-):
+) -> List[float]:
     """Run Experiments
 
     Args:
@@ -61,6 +61,7 @@ def run_experiment(
             scheduler.execute(current_time)
         cluster.sleep()    
 
+    # previous implementation of submitting all jobs?
     #for i in range(0, carbon_model.df.shape[0]):
     #    print(i)
     #    current_time = i
@@ -97,8 +98,9 @@ def prepare_experiment(
     reserved_instances: int,
     waiting_times_str: str,
     cluster_partition: str,
-    repeat: bool
-):
+    repeat: bool,
+    dynamic_power: bool,
+) -> None:
     """Prepare and Run Experiment
 
     Args:
@@ -110,6 +112,7 @@ def prepare_experiment(
         reserved_instances (int): number of reserved instances
         waiting_times_str (str): waiting times per queue
         cluster_partition (str): used cluster partition (queue), only for slurm experiment.
+        dynamic_power (bool): wether jobs use constant or dynamic power over their execution
     """
 
     file_name = f"results/simulation/{task_trace}/{scheduling_policy}-{carbon_start_index}-{carbon_policy}-{carbon_trace}-{reserved_instances}-{waiting_times_str}.csv"
@@ -124,8 +127,8 @@ def prepare_experiment(
     )
     set_waiting_times(waiting_times_str)
     carbon_model = get_carbon_model(carbon_trace, carbon_start_index)
-    tasks = load_tasks(task_trace)
-    carbon_model = carbon_model.extend(3600 / TIME_FACTOR)
+    tasks = load_tasks(task_trace, dynamic_power)
+    carbon_model = carbon_model.extend(int(3600 / TIME_FACTOR))
     results = []
     result = run_experiment(
         carbon_start_index,
@@ -139,17 +142,18 @@ def prepare_experiment(
         cluster_partition,
     )
     results.append(result)
-    results = pd.DataFrame(results, columns=["carbon_cost", "dollar_cost"])
+
+    results_df = pd.DataFrame(results, columns=["carbon_cost", "dollar_cost"])
     print(
         f"Saving Results to {file_name}"
     )
-    results.to_csv(file_name, index=False)
+    results_df.to_csv(file_name, index=False)
     print(
         f"Finish Experiments {task_trace} - {carbon_trace}-{scheduling_policy}-{carbon_policy}-{waiting_times_str}, and {reserved_instances} reserved"
     )
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(
         description="GAIA: Carbon Aware Scheduling Policies"
     )
@@ -211,6 +215,15 @@ def main():
         dest="start_index",
         help="carbon start index",
     )
+
+    parser.add_argument(
+        "--dynamic-power-draw",
+        default=False,
+        dest="dynamic_power_draw",
+        action=argparse.BooleanOptionalAction, 
+        help="If executed jobs have a power draw depending on time. The default of False means that all jobs have a constant draw (this is the GAIA default)."
+    )
+
     parser.add_argument(
         "--carbon-policy",
         default="oracle",
@@ -244,7 +257,8 @@ def main():
             args.reserved_instances,
             args.waiting_times_str,
             args.cluster_partition,
-            args.repeat
+            args.repeat,
+            args.dynamic_power_draw
         )
 
 

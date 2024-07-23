@@ -1,3 +1,5 @@
+from typing import Dict
+from carbon import CarbonModel
 from scheduling.carbon_waiting_policy import compute_carbon_consumption
 from task import Task
 from .base_cluster import BaseCluster
@@ -7,7 +9,7 @@ import os
 
 class SimulationCluster(BaseCluster):
     def __init__(
-        self, reserved_instances, carbon_model, experiment_name: str, allow_spot: True
+        self, reserved_instances: int, carbon_model: CarbonModel, experiment_name: str, allow_spot: True
     ) -> None:
         super().__init__(
             reserved_instances=reserved_instances,
@@ -15,9 +17,9 @@ class SimulationCluster(BaseCluster):
             experiment_name=experiment_name,
             allow_spot=allow_spot,
         )
-        self.release_instance = {}
+        self.release_instance: Dict[int, int] = {}
 
-    def submit(self, current_time, task):
+    def submit(self, current_time: int, task: Task) -> None:
         try:
             c_model = self.carbon_model.subtrace(
                 current_time, current_time + max(task.task_length, task.expected_time)
@@ -56,11 +58,11 @@ class SimulationCluster(BaseCluster):
             print("RealClusterCost: execute error")
             raise
 
-    def refresh_data(self, current_time):
+    def refresh_data(self, current_time: int) -> None:
         # release used resource
         self.release_reserved(current_time)
 
-    def release_reserved(self, current_time):
+    def release_reserved(self, current_time: int) -> None:
         if current_time in self.release_instance:
             self.available_reserved_instances += self.release_instance[current_time]
             del self.release_instance[current_time]
@@ -69,26 +71,26 @@ class SimulationCluster(BaseCluster):
         ), "Available Reserved greater thant Total"
         assert self.available_reserved_instances >= 0, "Greater than zero"
 
-    def done(self):
+    def done(self) -> bool:
         return True
 
-    def sleep(self):
+    def sleep(self) -> None:
         return
 
     def save_results(
         self,
         cluster_type: str,
-        scheduling_policy,
-        carbon_policy,
-        carbon_trace,
-        task_trace,
-        waiting_times_str,
-    ):
+        scheduling_policy: str,
+        carbon_policy: str,
+        carbon_trace: str,
+        task_trace: str,
+        waiting_times: str,
+    ) -> None:
         super().save_results(
             cluster_type,
             scheduling_policy,
             carbon_policy,
             carbon_trace,
             task_trace,
-            waiting_times_str,
+            waiting_times,
         )

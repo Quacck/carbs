@@ -5,7 +5,7 @@ from .suspend_scheduling_policy import SuspendSchedulingPolicy
 from .carbon_waiting_policy import best_waiting_time, lowest_carbon_slot, oracle_carbon_slot,oracle_carbon_slot_waiting,average_carbon_slot_waiting
 
 
-def create_scheduler(cluster: BaseCluster, scheduling_policy: str, carbon_policy, carbon_model: CarbonModel) -> SchedulingPolicy:
+def create_scheduler(cluster: BaseCluster, scheduling_policy: str, carbon_policy: str, carbon_model: CarbonModel) -> SchedulingPolicy | SuspendSchedulingPolicy:
     if carbon_policy == "waiting":
         start_time_policy = best_waiting_time
     elif carbon_policy == "lowest":
