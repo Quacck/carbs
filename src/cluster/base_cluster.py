@@ -25,6 +25,15 @@ class TaskDetails(TypedDict):
     exit_time: int
     reason: str
 
+class PhaseDetails(TypedDict):
+    ID: int
+    length: int
+    carbon_cost: float
+    dollar_cost: float
+    start_time: int
+    exit_time: int
+    reason: str
+
 class BaseCluster(ABC):
     def __init__(
         self,
@@ -81,6 +90,12 @@ class BaseCluster(ABC):
         self.max_time = max(self.max_time, start_time)
         for i in range(start_time, exit_time + 1):
             self.runtime_allocation[i] += task.CPUs
+
+
+        # okay lets try something crazy, instead of just logging the task, we'll also log each phase 
+        for phase in task.power_consumption_function.phases:
+            pass
+
         self.details.append(TaskDetails(
             ID = task.ID,
             arrival_time = task.arrival_time,

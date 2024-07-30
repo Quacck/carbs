@@ -1,3 +1,4 @@
+from typing import List
 from task import Task, TIME_FACTOR
 from carbon import CarbonModel
 import numpy as np
@@ -31,8 +32,7 @@ def compute_carbon_consumption(task: Task, start_time: int, carbon_trace: Carbon
     """
 
     # the unit of the carbon_intensity is gCO₂eq/kWh
-    execution_carbon = carbon_trace.df["carbon_intensity_avg"][start_time:start_time +
-                                                               task.task_length]
+    execution_carbon = carbon_trace.df["carbon_intensity_avg"][start_time : start_time + task.task_length]
     assert len(execution_carbon) == task.task_length, "Trace is shorter than task"
 
     # in comparison to base GAIA, our jobs now cost a variable amount of energy over
@@ -40,13 +40,13 @@ def compute_carbon_consumption(task: Task, start_time: int, carbon_trace: Carbon
     # the power consumption function.
 
 
-    carbon_times_energy_draw = np.empty_like(execution_carbon)
+    carbon_times_power_draw = np.empty_like(execution_carbon)
     for i in range (execution_carbon.shape[0]):
         time_in_job = task.total_execution_time + i
         # should check wether we need the task.CPUs or if they should go into the function anyway
-        carbon_times_energy_draw[i] = task.power_consumption_function(time_in_job) * execution_carbon[i] * task.CPUs
+        carbon_times_power_draw[i] = task.power_consumption_function(time_in_job) * execution_carbon.iloc[i] * task.CPUs
 
-    carbon = carbon_times_energy_draw.sum()
+    carbon = carbon_times_power_draw.sum()
     return Schedule(start_time, start_time + task.task_length, carbon)
 
 
@@ -77,15 +77,10 @@ def oracle_carbon_slot(task: Task, carbon_trace: CarbonModel) -> Schedule:
     Returns:
         Schedule: Execution Schedule
     """
-    schedules = []
-    for i in range(0, task.waiting_time + 1, 3600//TIME_FACTOR):
-        try:
-            s = compute_carbon_consumption(task, i, carbon_trace)
-            schedules.append(s)
-        except:
-            pass
-    schedule = min(schedules, key=lambda x: x.carbon_cost)
-    return schedule
+    schedules: List[Schedule] = [compute_carbon_consumption(task, i, carbon_trace) for i in range(0, task.waiting_time + 1, 3600//TIME_FACTOR)]
+
+    best_schedule = min(schedules, key=lambda x: x.carbon_cost)
+    return best_schedule
 
 def oracle_carbon_slot_waiting(task: Task, carbon_trace: CarbonModel) -> Schedule:
     """Oracle Carbon Saving per waiting time policy that uses the actual job length
@@ -100,13 +95,10 @@ def oracle_carbon_slot_waiting(task: Task, carbon_trace: CarbonModel) -> Schedul
     schedules = []
     CA = None
     for i in range(0, task.waiting_time + 1, 3600//TIME_FACTOR):
-        try:
-            s = compute_carbon_consumption(task, i, carbon_trace)
-            schedules.append(s)            
-            if i == 0:
-                CA = s.carbon_cost
-        except:
-            pass
+        s = compute_carbon_consumption(task, i, carbon_trace)
+        schedules.append(s)            
+        if i == 0:
+            CA = s.carbon_cost
 
     if CA is None:
         raise BaseException('No CA')

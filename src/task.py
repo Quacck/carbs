@@ -1,16 +1,17 @@
 from enum import Enum
 import timeit
-from typing import List, Callable, Tuple
+from typing import Any, List, Callable, Tuple
 import pandas as pd
 import power_consumption_profiles as pcp
 from typing import Literal
+import numpy as np
 
 # since we only simulate things right now, we dont need to accelerate tasks by 5x
 # as state in the paper
 TIME_FACTOR = 1
 
 waiting_times: List[float] = []
-average_length: List[int] = []
+average_length: List[float] = []
 
 
 class TwoQueues(Enum):
@@ -18,7 +19,7 @@ class TwoQueues(Enum):
     Long = 86400/TIME_FACTOR
 
 
-def set_average_length(av_l: List[int]) -> None:
+def set_average_length(av_l: List[float]) -> None:
     global average_length
     average_length = av_l
 
@@ -30,7 +31,7 @@ def set_waiting_times(waiting_times_str: str) -> None:
     waiting_times = [float(hour_string)*3600/TIME_FACTOR for hour_string in waiting_times_str.split("x")]
 
 
-def get_expected_time(task_length_hours: float) -> Tuple[int, float, str]:
+def get_expected_time(task_length_hours: float) -> Tuple[float, float, str]:
     """Get expected time based on task length. It is used to estimate the task length upon arrival.
 
     Args:
@@ -111,7 +112,7 @@ def classify_resources(cpus: int) -> str:
 
 
 class Task:
-    def __init__(self, id:int, arrival_time: float, task_length: float, CPUs: int, total_execution_time: int = 0, power_consumption_function: Callable[[int], float] = lambda seconds_since_start: seconds_since_start) -> None:
+    def __init__(self, id:int, arrival_time: float, task_length: float, CPUs: int, total_execution_time: int, power_consumption_function: pcp.PowerFunction) -> None:
         """Task Class
 
         Args:
@@ -119,11 +120,14 @@ class Task:
             arrival_time (float): arrival time
             task_length (float): task length
             CPUs (int): number of CPUs
-            power_consumption_function: function that takes (seconds since beginning of job) and returns energy usage in Wh
+            power_consumption_function: function that takes (seconds since beginning of job) and returns energy usage in W
         """
         self.ID = id
         self.arrival_time = int(arrival_time)
         self.task_length = max(int(task_length), 1)
+
+        assert np.sum([phase["duration"] for phase in power_consumption_function.phases]) == task_length, 'wrong task length'
+
         self.task_length_class = classify_time(task_length)
         expected_time, waiting_time, queue = get_expected_time(
             self.task_length)
@@ -149,7 +153,10 @@ def load_tasks(trace_name:str, use_dynamic_power: bool) -> List[Task]:
     start = timeit.default_timer()
     tasks = []
     df = pd.read_csv(
-        f"src/cluster_traces/{trace_name}.csv")
+        f"src/cluster_traces/{trace_name}.csv", delimiter='|')
+    
+    print(df)
+
     df["arrival_time"]/= TIME_FACTOR
     df["length"]/= TIME_FACTOR
     av_l = [
@@ -159,15 +166,23 @@ def load_tasks(trace_name:str, use_dynamic_power: bool) -> List[Task]:
     set_average_length(av_l)
     print(f"{trace_name} average {av_l[1]}")
     # df = df[:10000]
-    #ids = df["id"].unique()
+    #ids = df["id"].unique()        
+
     for id, row in df.iterrows():
-        job_name: str = row.get("name", 'constant')
-        power_consumption = pcp.get_power_policy(job_name)
+        if (use_dynamic_power):
+            job_name: str = row.get("name", 'constant')
+            job_args: Tuple[Any] = eval(row.get("args", "None"))
+
+            print(job_args)
+
+            power_consumption = pcp.get_power_policy(job_name, job_args)
+        else:
+            power_consumption = pcp.get_power_policy('constant', 1)
 
         # currently, only jobs longer than an hour are supported because
         # the jobs are submitted to the cluster on an hour-basis
         # assert row["length"] >= 300/TIME_FACTOR, "Too short Job"
-        tasks.append(Task(id, row["arrival_time"],
+        tasks.append(Task(id ,row["arrival_time"],
                           row["length"], row["cpus"], total_execution_time=0, power_consumption_function=power_consumption))
     #assert len(ids) == len(tasks)
     print(f"Loading {trace_name} tasks took {timeit.default_timer()-start}")

@@ -3,8 +3,6 @@ from carbon import CarbonModel
 from scheduling.carbon_waiting_policy import compute_carbon_consumption
 from task import Task
 from .base_cluster import BaseCluster
-import pandas as pd
-import os
 
 
 class SimulationCluster(BaseCluster):
@@ -24,36 +22,41 @@ class SimulationCluster(BaseCluster):
             c_model = self.carbon_model.subtrace(
                 current_time, current_time + max(task.task_length, task.expected_time)
             )
+
+            # we calculate the carbon consimption again, because 
+            # tasks may be submitted via carbon_aware = false
             schedule = compute_carbon_consumption(task, 0, c_model)
             finish_time = schedule.actual_finish_time(current_time)
-            if self.allow_spot and task.task_length_class == "0-2":
-                self.total_carbon_cost += schedule.carbon_cost
-                self.total_dollar_cost += task.CPUs * task.task_length * self.spot_cost
-                self.log_task(
-                    current_time,
-                    task,
-                    task.CPUs * task.task_length * self.spot_cost,
-                    schedule.carbon_cost,
-                )
+            # if self.allow_spot and task.task_length_class == "0-2":
+            #     self.total_carbon_cost += schedule.carbon_cost
+            #     self.total_dollar_cost += task.CPUs * task.task_length * self.spot_cost
+            #     self.log_task(
+            #         current_time,
+            #         task,
+            #         task.CPUs * task.task_length * self.spot_cost,
+            #         schedule.carbon_cost,
+            #     )
+
+            if self.available_reserved_instances >= task.CPUs:
+                if finish_time not in self.release_instance:
+                    self.release_instance[finish_time] = 0
+                self.release_instance[finish_time] += task.CPUs
+                on_demand = 0
+                self.available_reserved_instances -= task.CPUs
             else:
-                if self.available_reserved_instances >= task.CPUs:
-                    if finish_time not in self.release_instance:
-                        self.release_instance[finish_time] = 0
-                    self.release_instance[finish_time] += task.CPUs
-                    on_demand = 0
-                    self.available_reserved_instances -= task.CPUs
-                else:
-                    on_demand = task.CPUs
-                self.total_carbon_cost += schedule.carbon_cost
-                self.total_dollar_cost += (
-                    on_demand * task.task_length * self.on_demand_cost
-                )
-                self.log_task(
-                    current_time,
-                    task,
-                    on_demand * task.task_length * self.on_demand_cost,
-                    schedule.carbon_cost,
-                )
+                on_demand = task.CPUs
+
+            self.total_carbon_cost += schedule.carbon_cost
+            self.total_dollar_cost += (
+                on_demand * task.task_length * self.on_demand_cost
+            )
+
+            self.log_task(
+                current_time,
+                task,
+                on_demand * task.task_length * self.on_demand_cost,
+                schedule.carbon_cost,
+            )
         except:
             print("RealClusterCost: execute error")
             raise

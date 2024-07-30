@@ -1,10 +1,26 @@
-from typing import List, TypedDict, Callable
-import numpy as np
+from typing import List, Tuple, TypedDict, Callable, Any
+from functools import reduce
 
 class Phase(TypedDict):
     name: str
     duration: float
     power: float
+
+class PowerFunction:
+    def __init__(self, phases: List[Phase], name: str | None,):
+        self.name = name
+        self.phases = phases
+
+    def __call__(self, time: int) -> float:
+        time_in_program: float = 0
+        for phase in self.phases:
+            start_of_this_phase = time_in_program
+            end_of_this_phase = time_in_program + phase['duration']
+            if start_of_this_phase <= time and time < end_of_this_phase:
+                return phase['power']
+            time_in_program += phase['duration']
+ 
+        return 0
 
 class MachineLearningParameters(TypedDict):
     start_duration: float
@@ -17,23 +33,22 @@ class MachineLearningParameters(TypedDict):
     save_power: float
     epochs: int
 
-def get_power_policy(name: str, *args) -> Callable[[int], float]: # type: ignore[no-untyped-def]
+def get_power_policy(name: str, args: Any) -> PowerFunction: # type: ignore[no-untyped-def]
     match name:
         case 'constant':
             # this would be the default GAIA job
-            return lambda x: 1
-        case 'constant-2':
-            return lambda x: 2
-        case 'linear':
-            return lambda x: x
-        case 'gradually-increasing':
-            return lambda x: (x % 1000) + 1
+            return PowerFunction([Phase(name='Constant', duration=float('inf'), power=args)], 'Constant')
+        case 'mocked-constant-from-phases':
+            # this would be the default GAIA job
+            return phases_to_constant_via_average(args)
         case 'ml':
-            return create_profile_ml(args[0])
+            assert args is not None, "Power profile has no arguments supplied"
+            return create_profile_ml(args)
         case 'roberta':
             return create_phases_profile(roberta_phases)
         case 'phases':
-            return create_phases_profile(list(args))
+            assert args is not None, "Power profile has no arguments supplied"
+            return create_phases_profile(args)
         case _:
             raise ValueError(f"Could not resolve {name} to a job profle")
 
@@ -61,22 +76,25 @@ roberta_phases: List[Phase] = [
     {'name': 'End training', 'duration': 1.5576, 'power': 123.31}
 ]
 
-def create_phases_profile(phases: List[Phase]) -> Callable[[int], float]:
-    def profile(time: int) -> float:
-        time_in_program: float = 0
-        for phase in phases:
-            start_of_this_phase = time_in_program
-            end_of_this_phase = time_in_program + phase['duration']
-            if start_of_this_phase <= time and time < end_of_this_phase:
-                return phase['power']
-            time_in_program += phase['duration']
+def create_phases_profile(phases: List[Phase]) -> PowerFunction:
+    return PowerFunction(phases, 'Phases')
 
-                  
-        return 0
-    
-    return profile
+def reduce_phase(total: Tuple[float, float], phase: Phase) -> Tuple[float, float]:
+    return total[0]+phase['power']*phase['duration'], total[1]+phase['duration']
 
-def create_profile_ml(params: MachineLearningParameters) -> Callable[[int], float]:
+def phases_to_constant_via_average(phases: List[Phase]) -> PowerFunction:
+    """
+    Take some phases and output a constant function that ideally integrates to the same amount of power over its execution.
+    Sounds useless, but this should give us the ability to compare the scheduling of some dynamic job vs. a constant job.
+    The scheduling itself would likely not be impacted (between different constant draws), but alteast we'd get some human
+    readable numbers out.
+    """
+
+    total_power, total_duration = reduce(reduce_phase, phases, (0,0)) # type: ignore 
+    average_power = total_power / total_duration
+    return PowerFunction([{'name': 'Constant', 'duration': total_duration, 'power': average_power}], 'Constant from Phase')
+
+def create_profile_ml(params: MachineLearningParameters) -> PowerFunction:
     phases = [
         Phase(name='Startup', duration=params['start_duration'], power=params['start_power']),
         *([

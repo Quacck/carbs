@@ -7,7 +7,6 @@ from task import Task, set_waiting_times, load_tasks, TIME_FACTOR
 from scheduling import create_scheduler
 from cluster import create_cluster
 import hashlib
-import time
 import os
 
 
@@ -52,31 +51,29 @@ def run_experiment(
         cluster, scheduling_policy, carbon_policy, carbon_model
     )
 
-    for task in tasks:
-        current_time = task.arrival_time
-        print(current_time)
-        scheduler.submit(current_time, task)
+    # for task in tasks:
+    #     current_time = task.arrival_time
+    #     scheduler.submit(current_time, task)
 
-        with cluster.lock:
-            scheduler.execute(current_time)
-        cluster.sleep()    
+    #     with cluster.lock:
+    #         scheduler.execute(current_time)
+    #     cluster.sleep()    
 
     # previous implementation of submitting all jobs?
-    #for i in range(0, carbon_model.df.shape[0]):
-    #    print(i)
-    #    current_time = i
-    #    while len(tasks) > 0:
-    #        if tasks[0].arrival_time <= current_time:
-    #            if tasks[0].task_length > 0:
-    #                scheduler.submit(current_time, tasks[0])
-    #            del tasks[0]
-    #        else:
-    #            break
-    #    with cluster.lock:
-    #        scheduler.execute(current_time)
-    #    cluster.sleep()
-    #    if len(tasks) == 0 and scheduler.queue.empty() and cluster.done():
-    #        break
+    for i in range(0, carbon_model.df.shape[0]):
+        current_time = i
+        while len(tasks) > 0:
+            if tasks[0].arrival_time <= current_time:
+                if tasks[0].task_length > 0:
+                    scheduler.submit(current_time, tasks[0])
+                del tasks[0]
+            else:
+                break
+        with cluster.lock:
+            scheduler.execute(current_time)
+        cluster.sleep()
+        if len(tasks) == 0 and scheduler.queue.empty() and cluster.done():
+            break
 
     cluster.save_results(
         "simulation",
@@ -115,7 +112,7 @@ def prepare_experiment(
         dynamic_power (bool): wether jobs use constant or dynamic power over their execution
     """
 
-    file_name = f"results/simulation/{task_trace}/{scheduling_policy}-{carbon_start_index}-{carbon_policy}-{carbon_trace}-{reserved_instances}-{waiting_times_str}.csv"
+    file_name = f"results/simulation/{task_trace}/{scheduling_policy}-{carbon_start_index}-{carbon_policy}-{carbon_trace}-{reserved_instances}-{waiting_times_str}-{dynamic_power}.csv"
 
     if os.path.exists(file_name) and repeat == False:
         print(f"Skipping Experiments {task_trace} - {carbon_trace}-{scheduling_policy}-{carbon_policy}-{waiting_times_str}, and {reserved_instances} reserved because the results already exists and repeat parameter not set")
@@ -149,7 +146,7 @@ def prepare_experiment(
     )
     results_df.to_csv(file_name, index=False)
     print(
-        f"Finish Experiments {task_trace} - {carbon_trace}-{scheduling_policy}-{carbon_policy}-{waiting_times_str}, and {reserved_instances} reserved"
+        f"Finish Experiments {task_trace} - {carbon_trace}-{scheduling_policy}-{carbon_policy}-{waiting_times_str}-{dynamic_power}, and {reserved_instances} reserved"
     )
 
 

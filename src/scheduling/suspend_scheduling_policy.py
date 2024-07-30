@@ -1,10 +1,10 @@
+from __future__ import annotations
 from carbon import CarbonModel
 from task import TIME_FACTOR, Task
 from queue import PriorityQueue
 from cluster import BaseCluster
 from pandas import DataFrame
 from typing import List
-from __future__ import annotations
 
 
 class QueueObject:
