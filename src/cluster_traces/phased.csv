@@ -2,6 +2,7 @@ arrival_time|length|cpus|name|args
 0|3600.0|1|phases|[{'name': 'Start', 'duration': 3600, 'power': 59.9}]
 3600|3600.0|1|mocked-constant-from-phases|[{'name': 'Start', 'duration': 3600, 'power': 59.9}]
 3600|7200.0|1|phases|[{'name': 'Start', 'duration': 3600, 'power': 59.9},{'name': 'Work', 'duration': 3600, 'power': 200}]
+3500|7200.0|1|mocked-constant-from-phases|[{'name': 'Start', 'duration': 3600, 'power': 59.9},{'name': 'Work', 'duration': 3600, 'power': 200}]
 86400|7200.0|1|phases|[{'name': 'Start', 'duration': 3600, 'power': 59.9},{'name': 'Work', 'duration': 3600, 'power': 200}]
 90000|7200.0|1|phases|[{'name': 'Start', 'duration': 3600, 'power': 59.9},{'name': 'Work', 'duration': 3600, 'power': 200}]
 93600|7200.0|1|phases|[{'name': 'Start', 'duration': 3600, 'power': 59.9},{'name': 'Work', 'duration': 3600, 'power': 200}]

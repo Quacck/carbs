@@ -1,10 +1,73 @@
-from typing import List, Tuple, TypedDict, Callable, Any
+from __future__ import annotations
+from typing import List, Tuple, TypedDict, Callable, Any, Iterable, Dict, NotRequired
 from functools import reduce
+from statemachine import StateMachine, State
+import numpy as np
 
 class Phase(TypedDict):
     name: str
     duration: float
     power: float
+    is_checkpoint: NotRequired[bool]
+
+class PhaseSpec(TypedDict):
+    startup: List[Phase]
+    work: List[Phase]
+    end: List[Phase]
+
+class FooPowerFunction:
+    def __init__(self, phases: PhaseSpec, name: str | None = None):
+        self.name = name
+        self.phases = phases
+        self.duration_startup: float = np.sum([phase['duration'] for phase in phases['startup']])
+        self.duration_work: float = np.sum([phase['duration'] for phase in phases['work']])
+        self.duration_end: float = np.sum([phase['duration'] for phase in phases['end']])
+
+    def __call__(self, time: float, time_worked: float = 0) -> float:
+        '''
+        :param time: current time since resume or execution start
+        :param time_worked: seconds of work the job has had so far
+        :return: power consumption in W
+        '''
+        
+        if (time < self.duration_startup):
+            return self.get_power_in_phases(self.phases['startup'], time)
+        
+        time_until_end = self.duration_startup + self.duration_work - time_worked
+
+        if (time >= self.duration_startup and time < time_until_end):
+            # find the last checkpoint we have reached
+            remaining_time_worked: float = float(time_worked)             
+            last_checkpoint: None | Phase = None
+            for phase in self.phases['work']:
+                if remaining_time_worked <= 0:
+                    break
+                remaining_time_worked -= phase['duration']
+                if (phase.get('is_checkpoint', False)):
+                    last_checkpoint = phase
+
+
+            start_index_of_phase = self.phases['work'].index(last_checkpoint) + 1 if last_checkpoint is not None else 0
+
+            return self.get_power_in_phases(self.phases['work'][start_index_of_phase: ], time - self.duration_startup)
+        
+        return self.get_power_in_phases(self.phases['end'], time - time_until_end)
+    
+    def get_power_in_phases(self, phases: Iterable[Phase], time: float) -> float:
+
+        time_in_program = 0.0
+        for phase in phases:
+            start_of_this_phase = time_in_program
+            end_of_this_phase = time_in_program + phase['duration']
+            if start_of_this_phase <= time and time < end_of_this_phase:
+                return phase['power']
+            time_in_program += phase['duration']
+ 
+        return 0
+    
+    def get_length(self) -> float:
+        return self.duration_startup + self.duration_work + self.duration_end
+
 
 class PowerFunction:
     def __init__(self, phases: List[Phase], name: str | None,):
@@ -75,6 +138,23 @@ roberta_phases: List[Phase] = [
     {'name': 'Evaluate', 'duration': 2.668, 'power': 107.83},
     {'name': 'End training', 'duration': 1.5576, 'power': 123.31}
 ]
+
+foo_phases_spec: PhaseSpec = {
+    'startup':   [
+        {'name': 'Start', 'duration': 5.349, 'power': 59.9},
+        {'name': 'Finish Imports', 'duration': 12.36, 'power': 53.77},
+        {'name': 'after load data', 'duration': 5.7513, 'power': 63.17}, 
+    ],
+    'work': [
+      {'name': 'Train', 'duration': 7.437, 'power': 230.0}, 
+      {'name': 'Evaluate', 'duration': 2.720, 'power': 105.1}, 
+      {'name': 'Save', 'duration': 1.6, 'power': 120.0, 'is_checkpoint': True}, 
+    ] * 5, 
+    'end': [
+        {'name': 'End training', 'duration': 1.5576, 'power': 123.31}
+
+    ]
+}
 
 def create_phases_profile(phases: List[Phase]) -> PowerFunction:
     return PowerFunction(phases, 'Phases')

@@ -126,8 +126,6 @@ class Task:
         self.arrival_time = int(arrival_time)
         self.task_length = max(int(task_length), 1)
 
-        assert np.sum([phase["duration"] for phase in power_consumption_function.phases]) == task_length, 'wrong task length'
-
         self.task_length_class = classify_time(task_length)
         expected_time, waiting_time, queue = get_expected_time(
             self.task_length)

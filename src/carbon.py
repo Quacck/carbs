@@ -2,6 +2,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 from pandas.core.frame import DataFrame
+import os
 
 
 class CarbonModel():
@@ -24,10 +25,10 @@ class CarbonModel():
         model = CarbonModel(self.name, df,self.carbon_start_index, self.carbon_error)
         return model
     
-    def extend(self, factor: int) -> CarbonModel:
+    def extend(self, factor: int, extra_columns: bool = False) -> CarbonModel:
         # right now this is not interpolated between sample points, perhaps
         # chaning this could be cool.
-        df = pd.DataFrame(np.repeat(self.df.values, factor, axis=0), columns=["carbon_intensity_avg"])
+        df = self.df.loc[self.df.index.repeat(factor)].reset_index(drop=True)
         df["carbon_intensity_avg"] /= factor
         model = CarbonModel(self.name, df,self.carbon_start_index, self.carbon_error)
         return model     
@@ -36,8 +37,11 @@ class CarbonModel():
         return self.df.iloc[index]['carbon_intensity_avg']
 
 
-def get_carbon_model(carbon_trace: str, carbon_start_index: int, carbon_error:str = "ORACLE") -> CarbonModel:
-    df = pd.read_csv(f"src/traces/{carbon_trace}.csv")
+def get_carbon_model(carbon_trace: str, carbon_start_index: int, carbon_error:str = "ORACLE", extra_columns: bool = False) -> CarbonModel:
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    relative_path = f"traces/{carbon_trace}.csv"
+    absolute_path = os.path.join(script_dir, relative_path)
+    df = pd.read_csv(absolute_path)
 
     # 17544 is 2 years
     # 720 is 24 * 30, so a whole month
@@ -46,7 +50,7 @@ def get_carbon_model(carbon_trace: str, carbon_start_index: int, carbon_error:st
 
     df = df[17544+carbon_start_index:17544+carbon_start_index+(720*2)]
     #df = pd.concat([df.copy(), df[:1000].copy()]).reset_index()
-    df = df[["carbon_intensity_avg"]]
+    df = df[["carbon_intensity_avg", *(["datetime", "timestamp"] if extra_columns else [])]]
     df["carbon_intensity_avg"] /= 1000
     c = CarbonModel(carbon_trace, df, carbon_start_index, carbon_error)
     return c
