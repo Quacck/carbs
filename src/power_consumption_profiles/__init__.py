@@ -141,19 +141,15 @@ roberta_phases: List[Phase] = [
 
 foo_phases_spec: PhaseSpec = {
     'startup':   [
-        {'name': 'Start', 'duration': 5.349, 'power': 59.9},
-        {'name': 'Finish Imports', 'duration': 12.36, 'power': 53.77},
-        {'name': 'after load data', 'duration': 5.7513, 'power': 63.17}, 
+        {'name': 'Start Python', 'duration': 5, 'power': 50},
+        {'name': 'Download Data', 'duration': 10, 'power': 70},
     ],
     'work': [
-      {'name': 'Train', 'duration': 7.437, 'power': 230.0}, 
-      {'name': 'Evaluate', 'duration': 2.720, 'power': 105.1}, 
-      {'name': 'Save', 'duration': 1.6, 'power': 120.0, 'is_checkpoint': True}, 
-    ] * 5, 
-    'end': [
-        {'name': 'End training', 'duration': 1.5576, 'power': 123.31}
-
-    ]
+      {'name': 'Train', 'duration': 10, 'power': 230.0}, 
+      {'name': 'Evaluate', 'duration': 5, 'power': 105.1}, 
+      {'name': 'Save', 'duration': 3, 'power': 120.0, 'is_checkpoint': True}, 
+    ] * 1, 
+    'end': [ ]
 }
 
 def create_phases_profile(phases: List[Phase]) -> PowerFunction:
