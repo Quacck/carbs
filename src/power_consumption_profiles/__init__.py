@@ -141,14 +141,13 @@ roberta_phases: List[Phase] = [
 
 foo_phases_spec: PhaseSpec = {
     'startup':   [
-        {'name': 'Start Python', 'duration': 5, 'power': 50},
-        {'name': 'Download Data', 'duration': 10, 'power': 70},
+        {'name': 'Start Python', 'duration': 20, 'power': 50},
+        {'name': 'Download Data', 'duration': 20, 'power': 70},
     ],
     'work': [
-      {'name': 'Train', 'duration': 10, 'power': 230.0}, 
-      {'name': 'Evaluate', 'duration': 5, 'power': 105.1}, 
-      {'name': 'Save', 'duration': 3, 'power': 120.0, 'is_checkpoint': True}, 
-    ] * 1, 
+      {'name': 'High', 'duration': 50, 'power': 230.0}, 
+      {'name': 'Low', 'duration': 50, 'power': 105.1}, 
+    ] * 3, 
     'end': [ ]
 }
 
