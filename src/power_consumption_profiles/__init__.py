@@ -13,7 +13,6 @@ class Phase(TypedDict):
 class PhaseSpec(TypedDict):
     startup: List[Phase]
     work: List[Phase]
-    end: List[Phase]
 
 class FooPowerFunction:
     def __init__(self, phases: PhaseSpec, name: str | None = None):
@@ -21,7 +20,7 @@ class FooPowerFunction:
         self.phases = phases
         self.duration_startup: float = np.sum([phase['duration'] for phase in phases['startup']])
         self.duration_work: float = np.sum([phase['duration'] for phase in phases['work']])
-        self.duration_end: float = np.sum([phase['duration'] for phase in phases['end']])
+        self.duration = self.duration_startup + self.duration_work
 
     def __call__(self, time: float, time_worked: float = 0) -> float:
         '''
@@ -64,10 +63,6 @@ class FooPowerFunction:
             time_in_program += phase['duration']
  
         return 0
-    
-    def get_length(self) -> float:
-        return self.duration_startup + self.duration_work + self.duration_end
-
 
 class PowerFunction:
     def __init__(self, phases: List[Phase], name: str | None,):
@@ -139,6 +134,32 @@ roberta_phases: List[Phase] = [
     {'name': 'End training', 'duration': 1.5576, 'power': 123.31}
 ]
 
+roberta_phases_spec: PhaseSpec = {
+    'startup': [
+        {'name': 'Start', 'duration': 5.349, 'power': 59.9},
+        {'name': 'Finish Imports', 'duration': 12.36, 'power': 53.77},
+        {'name': 'after load data', 'duration': 5.7513, 'power': 63.17}, 
+    ],
+    'work': [
+        {'name': 'Start training', 'duration': 8.171, 'power': 221.93}, 
+        {'name': 'Epoch 1.0 ended', 'duration': 1.5477, 'power': 134.0}, 
+        {'name': 'Evaluate5', 'duration': 2.720, 'power': 105.1}, 
+        {'name': 'Epoch 1.0. Saved', 'duration': 7.437, 'power': 235.37}, 
+        {'name': 'Epoch 2.0 ended', 'duration': 1.5130, 'power': 139.88}, 
+        {'name': 'Evaluate', 'duration': 2.698, 'power': 114.09}, 
+        {'name': 'Epoch 2.0. Saved', 'duration': 7.430, 'power': 239.19},
+        {'name': 'Epoch 3.0 ended', 'duration': 1.4680, 'power': 143.62},
+        {'name': 'Evaluate', 'duration': 2.679, 'power': 112.46},
+        {'name': 'Epoch 3.0. Saved', 'duration': 7.453, 'power': 238.28},
+        {'name': 'Epoch 4.0 ended', 'duration': 1.5398, 'power': 141.87},
+        {'name': 'Evaluate', 'duration': 2.669, 'power': 112.87},
+        {'name': 'Epoch 4.0. Saved', 'duration': 7.455, 'power': 236.59},
+        {'name': 'Epoch 5.0 ended', 'duration': 1.514, 'power': 146.69},
+        {'name': 'Evaluate', 'duration': 2.668, 'power': 107.83},
+        {'name': 'End training', 'duration': 1.5576, 'power': 123.31}
+    ]
+}
+
 foo_phases_spec: PhaseSpec = {
     'startup':   [
         {'name': 'Start Python', 'duration': 20, 'power': 50},
@@ -147,8 +168,7 @@ foo_phases_spec: PhaseSpec = {
     'work': [
       {'name': 'High', 'duration': 50, 'power': 230.0}, 
       {'name': 'Low', 'duration': 50, 'power': 105.1}, 
-    ] * 3, 
-    'end': [ ]
+    ] * 3
 }
 
 def create_phases_profile(phases: List[Phase]) -> PowerFunction:
