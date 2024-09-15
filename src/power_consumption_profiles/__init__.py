@@ -1,21 +1,20 @@
 from __future__ import annotations
-from typing import List, Tuple, TypedDict, Callable, Any, Iterable, Dict, NotRequired
+from typing import List, Tuple, TypedDict, Any, Iterable, NotRequired
 from functools import reduce
-from statemachine import StateMachine, State
 import numpy as np
 
+class ModelParameters(TypedDict):
+    startup: List[Phase]
+    work: List[Phase]
+    
 class Phase(TypedDict):
     name: str
     duration: float
     power: float
     is_checkpoint: NotRequired[bool]
 
-class PhaseSpec(TypedDict):
-    startup: List[Phase]
-    work: List[Phase]
-
-class FooPowerFunction:
-    def __init__(self, phases: PhaseSpec, name: str | None = None):
+class PowerFunction:
+    def __init__(self, phases: ModelParameters, name: str | None = None):
         self.name = name
         self.phases = phases
         self.duration_startup: float = np.sum([phase['duration'] for phase in phases['startup']])
@@ -50,7 +49,7 @@ class FooPowerFunction:
 
             return self.get_power_in_phases(self.phases['work'][start_index_of_phase: ], time - self.duration_startup)
         
-        return self.get_power_in_phases(self.phases['end'], time - time_until_end)
+        return 0
     
     def get_power_in_phases(self, phases: Iterable[Phase], time: float) -> float:
 
@@ -64,23 +63,12 @@ class FooPowerFunction:
  
         return 0
 
-class PowerFunction:
-    def __init__(self, phases: List[Phase], name: str | None,):
-        self.name = name
-        self.phases = phases
-
-    def __call__(self, time: int) -> float:
-        time_in_program: float = 0
-        for phase in self.phases:
-            start_of_this_phase = time_in_program
-            end_of_this_phase = time_in_program + phase['duration']
-            if start_of_this_phase <= time and time < end_of_this_phase:
-                return phase['power']
-            time_in_program += phase['duration']
- 
-        return 0
 
 class MachineLearningParameters(TypedDict):
+    """
+    Parameters for the helpter function that create ModelParameters for a ML Job, 
+    as found out during my experiments
+    """
     start_duration: float
     start_power: float
     training_duration: float
@@ -95,7 +83,7 @@ def get_power_policy(name: str, args: Any) -> PowerFunction: # type: ignore[no-u
     match name:
         case 'constant':
             # this would be the default GAIA job
-            return PowerFunction([Phase(name='Constant', duration=float('inf'), power=args)], 'Constant')
+            return PowerFunction({'startup': [], 'work': [Phase(name='Constant', duration=float('inf'), power=args)]}, 'Constant')
         case 'mocked-constant-from-phases':
             # this would be the default GAIA job
             return phases_to_constant_via_average(args)
@@ -103,7 +91,7 @@ def get_power_policy(name: str, args: Any) -> PowerFunction: # type: ignore[no-u
             assert args is not None, "Power profile has no arguments supplied"
             return create_profile_ml(args)
         case 'roberta':
-            return create_phases_profile(roberta_phases)
+            return create_phases_profile(roberta_phases_spec)
         case 'phases':
             assert args is not None, "Power profile has no arguments supplied"
             return create_phases_profile(args)
@@ -112,29 +100,7 @@ def get_power_policy(name: str, args: Any) -> PowerFunction: # type: ignore[no-u
 
 # This is based on the phases in the power-measurements/evaluate.ipynb
 # with a little cleanup (shortening the names and truncating the durations to 2 sig. digits)
-roberta_phases: List[Phase] = [
-    {'name': 'Start', 'duration': 5.349, 'power': 59.9},
-    {'name': 'Finish Imports', 'duration': 12.36, 'power': 53.77},
-    {'name': 'after load data', 'duration': 5.7513, 'power': 63.17}, 
-    {'name': 'Start training', 'duration': 8.171, 'power': 221.93}, 
-    {'name': 'Epoch 1.0 ended', 'duration': 1.5477, 'power': 134.0}, 
-    {'name': 'Evaluate5', 'duration': 2.720, 'power': 105.1}, 
-    {'name': 'Epoch 1.0. Saved', 'duration': 7.437, 'power': 235.37}, 
-    {'name': 'Epoch 2.0 ended', 'duration': 1.5130, 'power': 139.88}, 
-    {'name': 'Evaluate', 'duration': 2.698, 'power': 114.09}, 
-    {'name': 'Epoch 2.0. Saved', 'duration': 7.430, 'power': 239.19},
-    {'name': 'Epoch 3.0 ended', 'duration': 1.4680, 'power': 143.62},
-    {'name': 'Evaluate', 'duration': 2.679, 'power': 112.46},
-    {'name': 'Epoch 3.0. Saved', 'duration': 7.453, 'power': 238.28},
-    {'name': 'Epoch 4.0 ended', 'duration': 1.5398, 'power': 141.87},
-    {'name': 'Evaluate', 'duration': 2.669, 'power': 112.87},
-    {'name': 'Epoch 4.0. Saved', 'duration': 7.455, 'power': 236.59},
-    {'name': 'Epoch 5.0 ended', 'duration': 1.514, 'power': 146.69},
-    {'name': 'Evaluate', 'duration': 2.668, 'power': 107.83},
-    {'name': 'End training', 'duration': 1.5576, 'power': 123.31}
-]
-
-roberta_phases_spec: PhaseSpec = {
+roberta_phases_spec: ModelParameters = {
     'startup': [
         {'name': 'Start', 'duration': 5.349, 'power': 59.9},
         {'name': 'Finish Imports', 'duration': 12.36, 'power': 53.77},
@@ -160,7 +126,7 @@ roberta_phases_spec: PhaseSpec = {
     ]
 }
 
-foo_phases_spec: PhaseSpec = {
+foo_phases_spec: ModelParameters = {
     'startup':   [
         {'name': 'Start Python', 'duration': 20, 'power': 50},
         {'name': 'Download Data', 'duration': 20, 'power': 70},
@@ -171,8 +137,8 @@ foo_phases_spec: PhaseSpec = {
     ] * 3
 }
 
-def create_phases_profile(phases: List[Phase]) -> PowerFunction:
-    return PowerFunction(phases, 'Phases')
+def create_phases_profile(modelParameters: ModelParameters) -> PowerFunction:
+    return PowerFunction(modelParameters, 'Phases')
 
 def reduce_phase(total: Tuple[float, float], phase: Phase) -> Tuple[float, float]:
     return total[0]+phase['power']*phase['duration'], total[1]+phase['duration']
@@ -187,17 +153,20 @@ def phases_to_constant_via_average(phases: List[Phase]) -> PowerFunction:
 
     total_power, total_duration = reduce(reduce_phase, phases, (0,0)) # type: ignore 
     average_power = total_power / total_duration
-    return PowerFunction([{'name': 'Constant', 'duration': total_duration, 'power': average_power}], 'Constant from Phase')
+    return PowerFunction({
+        'startup': [],
+        'work' : [{'name': 'Constant', 'duration': total_duration, 'power': average_power}]
+    }, 'Constant from Phase')
 
 def create_profile_ml(params: MachineLearningParameters) -> PowerFunction:
-    phases = [
-        Phase(name='Startup', duration=params['start_duration'], power=params['start_power']),
-        *([
+    modelParameters: ModelParameters = {
+        'startup': [Phase(name='Startup', duration=params['start_duration'], power=params['start_power'])],
+        'work': [
             Phase(name='Train', duration=params['training_duration'], power=params['training_power']),
             Phase(name='Evaluate', duration=params['evaluate_duration'], power=params['evaluate_power']),
             Phase(name='Save', duration=params['save_duration'], power=params['save_power']),
-            
-        ] * params['epochs'])
-    ]
-    return create_phases_profile(phases)
+        ] * params['epochs']
+    }
+
+    return create_phases_profile(modelParameters)
 

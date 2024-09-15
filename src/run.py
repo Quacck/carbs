@@ -20,6 +20,7 @@ def run_experiment(
     task_trace: str,
     waiting_times_str: str,
     cluster_partition: str,
+    dynamic_power: bool
 ) -> List[float]:
     """Run Experiments
 
@@ -48,7 +49,7 @@ def run_experiment(
         cluster_partition,
     )
     scheduler = create_scheduler(
-        cluster, scheduling_policy, carbon_policy, carbon_model
+        cluster, scheduling_policy, carbon_policy, carbon_model, dynamic_power
     )
 
     # for task in tasks:
@@ -137,6 +138,7 @@ def prepare_experiment(
         task_trace,
         waiting_times_str,
         cluster_partition,
+        dynamic_power
     )
     results.append(result)
 
