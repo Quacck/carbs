@@ -126,17 +126,6 @@ roberta_phases_spec: ModelParameters = {
     ]
 }
 
-foo_phases_spec: ModelParameters = {
-    'startup':   [
-        {'name': 'Start Python', 'duration': 20, 'power': 50},
-        {'name': 'Download Data', 'duration': 20, 'power': 70},
-    ],
-    'work': [
-      {'name': 'High', 'duration': 50, 'power': 230.0}, 
-      {'name': 'Low', 'duration': 50, 'power': 105.1}, 
-    ] * 3
-}
-
 def create_phases_profile(modelParameters: ModelParameters) -> PowerFunction:
     return PowerFunction(modelParameters, 'Phases')
 
