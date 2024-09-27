@@ -1,2 +1,2 @@
-arrival_time,length,cpus
-0,3600.0,1
+arrival_time|length|cpus
+0|3600.0|1

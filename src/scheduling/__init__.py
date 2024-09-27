@@ -10,6 +10,8 @@ def create_scheduler(cluster: BaseCluster, scheduling_policy: str, carbon_policy
     if (dynamic_power and carbon_policy != 'oracle' and (scheduling_policy != 'carbon' or scheduling_policy != "suspend-resume")):
         raise ValueError("Dynamic power profile not supported for {carbon_policy} and {scheduling_policy}")
     
+    print(f"Finding scheduler for {carbon_policy} {scheduling_policy} {'with' if dynamic_power else 'without'} dynamic power")
+
     if carbon_policy == "waiting":
         start_time_policy = best_waiting_time
     elif carbon_policy == "lowest":

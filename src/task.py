@@ -138,7 +138,7 @@ class Task:
         self.power_consumption_function = power_consumption_function
 
 
-def load_tasks(trace_name:str, use_dynamic_power: bool) -> List[Task]:
+def load_tasks(trace_name:str, use_dynamic_power: bool, default_job_type: str | None = None, default_job_phases: str | None = None) -> List[Task]:
     """Load Task Trace
 
     Args:
@@ -168,12 +168,16 @@ def load_tasks(trace_name:str, use_dynamic_power: bool) -> List[Task]:
 
     for id, row in df.iterrows():
         if (use_dynamic_power):
-            job_name: str = row.get("name", 'constant')
-            job_args: Tuple[Any] = eval(row.get("args", "None"))
+            job_name: str = default_job_type if default_job_type is not None else row.get("name", 'constant')
+            job_args: Tuple[Any] = eval(default_job_phases) if default_job_phases is not None else eval(row.get("args", "None"))
 
-            print(job_args)
+            print(f"job_args: {job_args}")
 
-            power_consumption = pcp.get_power_policy(job_name, job_args)
+            if (job_name == 'periodic-phases'):#
+                # stupid hack, but we need the job length to be equal to phases's sum
+                power_consumption = pcp.get_power_policy(job_name, (job_args,row["length"]))
+            else:
+                power_consumption = pcp.get_power_policy(job_name, job_args)
         else:
             power_consumption = pcp.get_power_policy('constant', 1)
 

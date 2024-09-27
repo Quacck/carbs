@@ -63,6 +63,20 @@ class PowerFunction:
  
         return 0
 
+class PeriodicPowerFunction(PowerFunction):
+    def __init__(self, phases: ModelParameters, name: str | None = None, length: int = None):
+        # we need to repeat the provided phases until they add up to the specified length
+
+        if (length is None):
+            raise ValueError("Periodic Power Function has not target length")
+
+        length_of_work: int = int(reduce(lambda total, phase: total + phase['duration'], phases['work'], 0))
+        adjusted_phases: ModelParameters = {
+            'startup': phases['startup'],
+            'work': phases['work'] * max(int(length) // length_of_work, 1)
+        }
+
+        super().__init__(adjusted_phases, name)
 
 class MachineLearningParameters(TypedDict):
     """
@@ -95,6 +109,9 @@ def get_power_policy(name: str, args: Any) -> PowerFunction: # type: ignore[no-u
         case 'phases':
             assert args is not None, "Power profile has no arguments supplied"
             return create_phases_profile(args)
+        case 'periodic-phases':
+            assert args is not None, "Power profile has no arguments supplied"
+            return create_perioic_phases_profile(args[0], args[1])
         case _:
             raise ValueError(f"Could not resolve {name} to a job profle")
 
@@ -128,6 +145,10 @@ roberta_phases_spec: ModelParameters = {
 
 def create_phases_profile(modelParameters: ModelParameters) -> PowerFunction:
     return PowerFunction(modelParameters, 'Phases')
+
+
+def create_perioic_phases_profile(modelParameters: ModelParameters, length: int) -> PeriodicPowerFunction:
+    return PeriodicPowerFunction(modelParameters, 'Perioic', length)
 
 def reduce_phase(total: Tuple[float, float], phase: Phase) -> Tuple[float, float]:
     return total[0]+phase['power']*phase['duration'], total[1]+phase['duration']

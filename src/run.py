@@ -20,7 +20,8 @@ def run_experiment(
     task_trace: str,
     waiting_times_str: str,
     cluster_partition: str,
-    dynamic_power: bool
+    dynamic_power: bool,
+    set_filename: str | None
 ) -> List[float]:
     """Run Experiments
 
@@ -83,6 +84,7 @@ def run_experiment(
         carbon_model.name,
         task_trace,
         waiting_times_str,
+        set_filename
     )
     return [cluster.total_carbon_cost, cluster.total_dollar_cost]
 
@@ -98,6 +100,9 @@ def prepare_experiment(
     cluster_partition: str,
     repeat: bool,
     dynamic_power: bool,
+    dynamic_power_type: str | None,
+    dynamic_power_phases: str | None,
+    set_filename: str | None
 ) -> None:
     """Prepare and Run Experiment
 
@@ -113,7 +118,8 @@ def prepare_experiment(
         dynamic_power (bool): wether jobs use constant or dynamic power over their execution
     """
 
-    file_name = f"results/simulation/{task_trace}/{scheduling_policy}-{carbon_start_index}-{carbon_policy}-{carbon_trace}-{reserved_instances}-{waiting_times_str}-{dynamic_power}.csv"
+    default_file_name = f"results/simulation/{task_trace}/{scheduling_policy}-{carbon_start_index}-{carbon_policy}-{carbon_trace}-{reserved_instances}-{waiting_times_str}-{dynamic_power}.csv"
+    file_name = set_filename if set_filename is not None else default_file_name
 
     if os.path.exists(file_name) and repeat == False:
         print(f"Skipping Experiments {task_trace} - {carbon_trace}-{scheduling_policy}-{carbon_policy}-{waiting_times_str}, and {reserved_instances} reserved because the results already exists and repeat parameter not set")
@@ -125,9 +131,10 @@ def prepare_experiment(
     )
     set_waiting_times(waiting_times_str)
     carbon_model = get_carbon_model(carbon_trace, carbon_start_index)
-    tasks = load_tasks(task_trace, dynamic_power)
+    tasks = load_tasks(task_trace, dynamic_power, dynamic_power_type, dynamic_power_phases)
     carbon_model = carbon_model.extend(int(3600 / TIME_FACTOR))
     results = []
+
     result = run_experiment(
         carbon_start_index,
         carbon_model,
@@ -138,7 +145,8 @@ def prepare_experiment(
         task_trace,
         waiting_times_str,
         cluster_partition,
-        dynamic_power
+        dynamic_power,
+        set_filename
     )
     results.append(result)
 
@@ -224,6 +232,30 @@ def main() -> None:
     )
 
     parser.add_argument(
+        "--dynamic-power-draw-phases",
+        default=None,
+        dest="dynamic_power_draw_phases",
+        type=str,
+        help="Instead of reading phases arguments from the cluster_trace, use provided argument for all jobs"
+    )
+
+    parser.add_argument(
+        "--dynamic-power-draw-type",
+        default=None,
+        dest="dynamic_power_draw_type",
+        type=str,
+        help="Instead of reading power profile type from the cluster_trace, use provided argument for all jobs"
+    )
+
+    parser.add_argument(
+        "--filename",
+        default=None,
+        dest="filename",
+        type=str, 
+        help="Use provided filename instead of generating one"
+    )
+
+    parser.add_argument(
         "--carbon-policy",
         default="oracle",
         dest="carbon_policy",
@@ -257,7 +289,10 @@ def main() -> None:
             args.waiting_times_str,
             args.cluster_partition,
             args.repeat,
-            args.dynamic_power_draw
+            args.dynamic_power_draw,
+            args.dynamic_power_draw_type,
+            args.dynamic_power_draw_phases,
+            args.filename
         )
 
 

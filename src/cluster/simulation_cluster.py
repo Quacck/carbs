@@ -88,6 +88,7 @@ class SimulationCluster(BaseCluster):
         carbon_trace: str,
         task_trace: str,
         waiting_times: str,
+        set_filename: str | None,
     ) -> None:
         super().save_results(
             cluster_type,
@@ -96,4 +97,5 @@ class SimulationCluster(BaseCluster):
             carbon_trace,
             task_trace,
             waiting_times,
+            set_filename,
         )
