@@ -173,7 +173,7 @@ def load_tasks(trace_name:str, use_dynamic_power: bool, default_job_type: str | 
 
             print(f"job_args: {job_args}")
 
-            if (job_name == 'periodic-phases'):#
+            if (job_name == 'periodic-phases' or job_name == 'constant-from-periodic-phases'):
                 # stupid hack, but we need the job length to be equal to phases's sum
                 power_consumption = pcp.get_power_policy(job_name, (job_args,row["length"]))
             else:

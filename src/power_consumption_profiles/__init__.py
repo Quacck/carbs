@@ -98,9 +98,12 @@ def get_power_policy(name: str, args: Any) -> PowerFunction: # type: ignore[no-u
         case 'constant':
             # this would be the default GAIA job
             return PowerFunction({'startup': [], 'work': [Phase(name='Constant', duration=float('inf'), power=args)]}, 'Constant')
-        case 'mocked-constant-from-phases':
+        case 'constant-from-phases':
             # this would be the default GAIA job
             return phases_to_constant_via_average(args)
+        case 'constant-from-periodic-phases':
+            # this would be the default GAIA job
+            return periodic_phases_to_constant_via_average(args[0], args[1])
         case 'ml':
             assert args is not None, "Power profile has no arguments supplied"
             return create_profile_ml(args)
@@ -167,6 +170,27 @@ def phases_to_constant_via_average(phases: List[Phase]) -> PowerFunction:
         'startup': [],
         'work' : [{'name': 'Constant', 'duration': total_duration, 'power': average_power}]
     }, 'Constant from Phase')
+
+def periodic_phases_to_constant_via_average(modelParameters: ModelParameters, length: int) -> PowerFunction:
+    model = create_perioic_phases_profile(modelParameters, length)
+
+    total_power = 0.0
+    remaining_duration = length
+
+    for phase in [*model.phases['startup'], *model.phases['work']]:
+        if (remaining_duration > phase['duration']):
+            total_power += phase['power']*phase['duration']
+            remaining_duration -= int(phase['duration'])
+        else:
+            total_power += phase['power']*remaining_duration
+    
+    average_power = total_power / length
+
+    return PowerFunction({
+        'startup': [],
+        'work' : [{'name': 'Constant', 'duration': length, 'power': average_power}]
+    }, 'Constant from Periodic Phase')
+
 
 def create_profile_ml(params: MachineLearningParameters) -> PowerFunction:
     modelParameters: ModelParameters = {

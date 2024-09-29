@@ -128,7 +128,7 @@ class SuspendSchedulingDynamicPowerPolicy:
                 dynamic_power=True, 
                 use_progress=True, 
                 linearize=True,
-                timelimit=None,
+                timelimit=20*60,
                 scale_time=True,
         )
 

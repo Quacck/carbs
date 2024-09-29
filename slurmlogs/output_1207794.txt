@@ -1,0 +1,163 @@
+Executing: jobs/job-302.sh
+Start Experiments single-job - AU-SA-carbon-oracle-12, and 0 reserved
+Started Loading Tasks for single-job
+   arrival_time  length  cpus
+0             0  3600.0     1
+single-job average nan
+job_args: {'startup': [{'name': 'startup', 'duration': 120, 'power': 150}], 'work': [{'name': 'high', 'power': 200, 'duration': 900}, {'name': 'low', 'power': 100, 'duration': 2700}]}
+Loading single-job tasks took 0.014126497000688687
+Finding scheduler for oracle carbon with dynamic power
+Saving details to results/simulation/evaluation/carbon_constant-from-periodic-phases_2_120_200_12_details
+Saving runtime to results/simulation/single-job/runtime-carbon-8000-oracle-AU-SA-0-12.csv
+Saving Results to results/simulation/evaluation/carbon_constant-from-periodic-phases_2_120_200_12
+Finish Experiments single-job - AU-SA-carbon-oracle-12-True, and 0 reserved
+Executing: jobs/job-384.sh
+Set parameter WLSAccessID
+Set parameter WLSSecret
+Set parameter LicenseID to value 2562092
+Set parameter TimeLimit to value 1200
+Set parameter LogFile to value "gurobi.log"
+Using license file /home/vincent.opitz/master-thesis/gurobi1103/gurobi.lic
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+
+Gurobi Optimizer version 11.0.3 build v11.0.3rc0 (linux64 - "Debian GNU/Linux 12 (bookworm)")
+Copyright (c) 2024, Gurobi Optimization, LLC
+
+Read LP format model from file /tmp/6724275185d74c87b664695819a59157-pulp.lp
+Reading time = 0.01 seconds
+OBJ: 1921 rows, 960 columns, 4602 nonzeros
+
+CPU model: AMD EPYC 7742 64-Core Processor, instruction set [SSE2|AVX|AVX2]
+Thread count: 128 physical cores, 256 logical processors, using up to 32 threads
+
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+Optimize a model with 1921 rows, 960 columns and 4602 nonzeros
+Model fingerprint: 0x950d370c
+Variable types: 1 continuous, 959 integer (863 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [1e-03, 3e-03]
+  Bounds range     [1e+00, 4e+00]
+  RHS range        [1e+00, 2e+02]
+Presolve removed 1089 rows and 221 columns
+Presolve time: 0.03s
+Presolved: 832 rows, 739 columns, 2314 nonzeros
+Variable types: 0 continuous, 739 integer (648 binary)
+Found heuristic solution: objective 0.0080550
+Found heuristic solution: objective 0.0079372
+
+Root relaxation: objective 9.496166e-07, 201 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.00000    0   54    0.00794    0.00000   100%     -    0s
+H    0     0                       0.0079272    0.00000   100%     -    0s
+     0     0    0.00000    0   70    0.00793    0.00000   100%     -    0s
+     0     0    0.00000    0   86    0.00793    0.00000   100%     -    0s
+     0     0    0.00000    0   80    0.00793    0.00000   100%     -    0s
+     0     0    0.00000    0  115    0.00793    0.00000   100%     -    0s
+     0     0    0.00000    0  112    0.00793    0.00000   100%     -    0s
+     0     0    0.00000    0  112    0.00793    0.00000   100%     -    0s
+     0     2    0.00113    0  112    0.00793    0.00113  85.8%     -    0s
+H 1090   737                       0.0078828    0.00113  85.7%  10.7    0s
+
+Cutting planes:
+  Learned: 44
+  Cover: 4
+  Clique: 1
+  MIR: 2
+  Inf proof: 3
+  RLT: 18
+
+Explored 7588 nodes (63484 simplex iterations) in 1.20 seconds (0.62 work units)
+Thread count was 32 (of 256 available processors)
+
+Solution count 6: 0.00788278 0.00788278 0.00792722 ... 0.008055
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 7.882777777770e-03, best bound 7.882777777770e-03, gap 0.0000%
+
+Wrote result file '/tmp/6724275185d74c87b664695819a59157-pulp.sol'
+
+Start Experiments single-job - AU-SA-suspend-resume-oracle-24, and 0 reserved
+Started Loading Tasks for single-job
+   arrival_time  length  cpus
+0             0  3600.0     1
+single-job average nan
+job_args: {'startup': [{'name': 'startup', 'duration': 0, 'power': 150}], 'work': [{'name': 'high', 'power': 200, 'duration': 2700}, {'name': 'low', 'power': 100, 'duration': 900}]}
+Loading single-job tasks took 0.01138959001400508
+Finding scheduler for oracle suspend-resume with dynamic power
+gcd is 900
+2736000
+      carbon_intensity_avg
+0                 0.000015
+1                 0.000015
+2                 0.000015
+3                 0.000015
+4                 0.000014
+...                    ...
+3035              0.000017
+3036              0.000017
+3037              0.000017
+3038              0.000017
+3039              0.000017
+
+[3040 rows x 1 columns]
+WORK_LENGTH=4, STARTUP_LENGTH=0
+high0 must be between 0 and 4.0
+low1 must be between 3 and 5.0
+Status: Optimal
+Saving details to results/simulation/evaluation/suspend-resume_periodic-phases_1_0_200_24_details
+Saving runtime to results/simulation/single-job/runtime-suspend-resume-8000-oracle-AU-SA-0-24.csv
+Saving Results to results/simulation/evaluation/suspend-resume_periodic-phases_1_0_200_24
+Finish Experiments single-job - AU-SA-suspend-resume-oracle-24-True, and 0 reserved
+Executing: jobs/job-408.sh
+Set parameter WLSAccessID
+Set parameter WLSSecret
+Set parameter LicenseID to value 2562092
+Set parameter TimeLimit to value 1200
+Set parameter LogFile to value "gurobi.log"
+Using license file /home/vincent.opitz/master-thesis/gurobi1103/gurobi.lic
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+
+Gurobi Optimizer version 11.0.3 build v11.0.3rc0 (linux64 - "Debian GNU/Linux 12 (bookworm)")
+Copyright (c) 2024, Gurobi Optimization, LLC
+
+Read LP format model from file /tmp/ce8531dd76cd4bbaa727221f0da2e888-pulp.lp
+Reading time = 0.15 seconds
+OBJ: 47513 rows, 20160 columns, 113733 nonzeros
+
+CPU model: AMD EPYC 7742 64-Core Processor, instruction set [SSE2|AVX|AVX2]
+Thread count: 128 physical cores, 256 logical processors, using up to 32 threads
+
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+Optimize a model with 47513 rows, 20160 columns and 113733 nonzeros
+Model fingerprint: 0x48c301ec
+Variable types: 0 continuous, 20160 integer (17280 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 3e+03]
+  Objective range  [1e-03, 3e-03]
+  Bounds range     [1e+00, 6e+01]
+  RHS range        [1e+00, 3e+03]
+Presolve removed 23376 rows and 3121 columns
+Presolve time: 0.39s
+Presolved: 24137 rows, 17039 columns, 63994 nonzeros
+Variable types: 0 continuous, 17039 integer (14198 binary)
+
+Root relaxation: objective 7.930433e-06, 12705 iterations, 1.80 seconds (1.92 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.00001    0  472          -    0.00001      -     -    3s
+H    0     0                       0.1752426    0.00001   100%     -    6s
+     0     0    0.00001    0 1072    0.17524    0.00001   100%     -    7s
+H    0     0                       0.1486228    0.00001   100%     -    8s
+     0     0    0.00001    0 1071    0.14862    0.00001   100%     -    9s
+     0     0    0.00001    0  759    0.14862    0.00001   100%     -   12s
+     0     0    0.00001    0 1201    0.14862    0.00001   100%     -   13s
+     0     0    0.00001    0 1151    0.14862    0.00001   100%     -   20s
+     0     0    0.00001    0 1345    0.14862    0.00001   100%     -   23s
+     0     0    0.00001    0 1359    0.14862    0.00001   100%     -   28s
+     0     0    0.00001    0 1098    0.14862    0.00001   100%     -   29s
