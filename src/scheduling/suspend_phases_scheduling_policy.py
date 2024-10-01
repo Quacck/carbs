@@ -138,27 +138,19 @@ class SuspendSchedulingDynamicPowerPolicy:
             [3600, DEADLINE])# add an hour, which is the resolution of the carbon trace
 
         seconds_per_timeslot = math.gcd(*times) if options["scale_time"] else 1
-        print(f"gcd is {seconds_per_timeslot}")
+        
         SCALED_DEADLINE = DEADLINE // seconds_per_timeslot
         
         # Define the problem
         prob = pulp.LpProblem("StopResumeCarbonAwareScheduling", pulp.LpMinimize)
-
-        # The carbon trace is given in hours
-        print(len(carbon_trace.df))
-
         
         seconds_carbon_trace = carbon_trace.df.iloc[::seconds_per_timeslot].reset_index(drop=True) if options["scale_time"] else carbon_trace.df
         
-        #scaled_carbon_model = seconds_carbon_trace.df.iloc[::seconds_per_timeslot] # we now sample the seconds-based timescale by the gcd
-        #scaled_carbon_model = scaled_carbon_model.reset_index(drop=True)
-
-        print(seconds_carbon_trace)
 
         WORK_LENGTH = int(model.duration_work) // seconds_per_timeslot
         STARTUP_LENGTH = int(model.duration_startup) // seconds_per_timeslot
 
-        print(f"WORK_LENGTH={WORK_LENGTH}, STARTUP_LENGTH={STARTUP_LENGTH}")
+        # print(f"WORK_LENGTH={WORK_LENGTH}, STARTUP_LENGTH={STARTUP_LENGTH}")
 
         # This just needs to be a big number that otherwise won't occur during the LP process
         M = SCALED_DEADLINE * 2 
@@ -233,7 +225,7 @@ class SuspendSchedulingDynamicPowerPolicy:
                 lower_bound = max(duration, 0) 
                 upper_bound = duration + 1 + (int(phase["duration"]) / seconds_per_timeslot)
 
-                print(f'{phase_name} must be between {lower_bound} and {upper_bound}')
+                # print(f'{phase_name} must be between {lower_bound} and {upper_bound}')
 
                 for t in range(SCALED_DEADLINE):
 
@@ -292,7 +284,7 @@ class SuspendSchedulingDynamicPowerPolicy:
         # The solution so far seems to take a really long time, let's also add a maximum amount of startups to hopefully reduce the search space
         prob += pulp.lpSum([startup_finished[j] for j in range(SCALED_DEADLINE)]) <= 5, f"Max_starts"
 
-        solver = pulp.GUROBI_CMD(timeLimit=options["timelimit"])
+        solver = pulp.GUROBI_CMD(timeLimit=options["timelimit"], threads=256)
 
         prob.solve(solver)
 

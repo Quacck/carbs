@@ -187,8 +187,8 @@ def periodic_phases_to_constant_via_average(modelParameters: ModelParameters, le
     average_power = total_power / length
 
     return PowerFunction({
-        'startup': [],
-        'work' : [{'name': 'Constant', 'duration': length, 'power': average_power}]
+        'startup': [{'name': 'Constant', 'duration': model.duration_startup, 'power': average_power}],
+        'work' : [{'name': 'Constant', 'duration': length - model.duration_startup, 'power': average_power}]
     }, 'Constant from Periodic Phase')
 
 

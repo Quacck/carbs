@@ -1,0 +1,16 @@
+Start Experiments results/simulation/different_lengths/carbon_periodic-phases_0_0_100_12
+Started Loading Tasks for different_lengths
+job_args: {'startup': [{'name': 'startup', 'duration': 0, 'power': 150}], 'work': [{'name': 'high', 'power': 200, 'duration': 3600}, {'name': 'low', 'power': 100, 'duration': 3600}]}
+job_args: {'startup': [{'name': 'startup', 'duration': 0, 'power': 150}], 'work': [{'name': 'high', 'power': 200, 'duration': 3600}, {'name': 'low', 'power': 100, 'duration': 3600}]}
+job_args: {'startup': [{'name': 'startup', 'duration': 0, 'power': 150}], 'work': [{'name': 'high', 'power': 200, 'duration': 3600}, {'name': 'low', 'power': 100, 'duration': 3600}]}
+job_args: {'startup': [{'name': 'startup', 'duration': 0, 'power': 150}], 'work': [{'name': 'high', 'power': 200, 'duration': 3600}, {'name': 'low', 'power': 100, 'duration': 3600}]}
+job_args: {'startup': [{'name': 'startup', 'duration': 0, 'power': 150}], 'work': [{'name': 'high', 'power': 200, 'duration': 3600}, {'name': 'low', 'power': 100, 'duration': 3600}]}
+job_args: {'startup': [{'name': 'startup', 'duration': 0, 'power': 150}], 'work': [{'name': 'high', 'power': 200, 'duration': 3600}, {'name': 'low', 'power': 100, 'duration': 3600}]}
+job_args: {'startup': [{'name': 'startup', 'duration': 0, 'power': 150}], 'work': [{'name': 'high', 'power': 200, 'duration': 3600}, {'name': 'low', 'power': 100, 'duration': 3600}]}
+job_args: {'startup': [{'name': 'startup', 'duration': 0, 'power': 150}], 'work': [{'name': 'high', 'power': 200, 'duration': 3600}, {'name': 'low', 'power': 100, 'duration': 3600}]}
+job_args: {'startup': [{'name': 'startup', 'duration': 0, 'power': 150}], 'work': [{'name': 'high', 'power': 200, 'duration': 3600}, {'name': 'low', 'power': 100, 'duration': 3600}]}
+Finding scheduler for oracle carbon with dynamic power
+Saving details to results/simulation/different_lengths/carbon_periodic-phases_0_0_100_12_details
+Saving runtime to results/simulation/different_lengths/runtime-carbon-7000-oracle-AU-SA-0-12.csv
+Saving Results to results/simulation/different_lengths/carbon_periodic-phases_0_0_100_12
+Finish Experiments different_lengths - AU-SA-carbon-oracle-12-True, and 0 reserved

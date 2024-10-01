@@ -126,9 +126,8 @@ def prepare_experiment(
         return
     
 
-    print(
-        f"Start Experiments {task_trace} - {carbon_trace}-{scheduling_policy}-{carbon_policy}-{waiting_times_str}, and {reserved_instances} reserved"
-    )
+    print(f"Start Experiments {file_name}")
+    
     set_waiting_times(waiting_times_str)
     carbon_model = get_carbon_model(carbon_trace, carbon_start_index)
     tasks = load_tasks(task_trace, dynamic_power, dynamic_power_type, dynamic_power_phases)
@@ -270,7 +269,6 @@ def main() -> None:
         dest="repeat",
         action=argparse.BooleanOptionalAction, 
         help='Repeat experiments that are saved already')
-
 
     args = parser.parse_args()
     carbon_start_index = []

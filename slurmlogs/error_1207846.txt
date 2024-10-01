@@ -1,0 +1,1 @@
+slurmstepd-cx17: error: *** JOB 1207846 ON cx17 CANCELLED AT 2024-09-29T18:47:01 ***

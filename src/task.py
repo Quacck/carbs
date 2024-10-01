@@ -153,8 +153,6 @@ def load_tasks(trace_name:str, use_dynamic_power: bool, default_job_type: str | 
     df = pd.read_csv(
         f"src/cluster_traces/{trace_name}.csv", delimiter='|')
     
-    print(df)
-
     df["arrival_time"]/= TIME_FACTOR
     df["length"]/= TIME_FACTOR
     av_l = [
@@ -162,7 +160,7 @@ def load_tasks(trace_name:str, use_dynamic_power: bool, default_job_type: str | 
         df[df["length"] >= TwoQueues.Short.value]["length"].mean()
     ]
     set_average_length(av_l)
-    print(f"{trace_name} average {av_l[1]}")
+    #print(f"{trace_name} average {av_l[1]}")
     # df = df[:10000]
     #ids = df["id"].unique()        
 
@@ -187,5 +185,5 @@ def load_tasks(trace_name:str, use_dynamic_power: bool, default_job_type: str | 
         tasks.append(Task(id ,row["arrival_time"],
                           row["length"], row["cpus"], total_execution_time=0, power_consumption_function=power_consumption))
     #assert len(ids) == len(tasks)
-    print(f"Loading {trace_name} tasks took {timeit.default_timer()-start}")
+    #print(f"Loading {trace_name} tasks took {timeit.default_timer()-start}")
     return tasks
