@@ -140,7 +140,6 @@ class SuspendSchedulingDynamicPowerPolicy:
         seconds_per_timeslot = math.gcd(*times) if options["scale_time"] else 1
         
         SCALED_DEADLINE = DEADLINE // seconds_per_timeslot
-        
         # Define the problem
         prob = pulp.LpProblem("StopResumeCarbonAwareScheduling", pulp.LpMinimize)
         
@@ -290,7 +289,7 @@ class SuspendSchedulingDynamicPowerPolicy:
 
         print(f"Status: {pulp.LpStatus[prob.status]}")
 
-        schedule = [0] * DEADLINE
+        schedule = []
 
         for t in range(SCALED_DEADLINE):
             is_in_startup = pulp.value(starting[t]) is not None and pulp.value(starting[t])  > 0
@@ -298,7 +297,10 @@ class SuspendSchedulingDynamicPowerPolicy:
 
             if (is_in_startup or is_working):
                 # need to scale it back to the seconds-timescale
-                schedule[t*seconds_per_timeslot : (t+1)*seconds_per_timeslot-1] = [1] * seconds_per_timeslot
+                schedule += [1] * seconds_per_timeslot
+            else:
+                schedule += [0] * seconds_per_timeslot
+                # schedule[t*seconds_per_timeslot : ((t+1)*seconds_per_timeslot) + 1] = ([1] * seconds_per_timeslot) -1
 
         if (debugOptions is not None):
             return SchedulerDebug(

@@ -54,9 +54,9 @@ for scheduling_policy in "${scheduling_policies[@]}"; do
                         work_phase=${work_phases[$work_phase_index]}
 
                         filename="results/simulation/different_lengths/${scheduling_policy}_${work_type}_${work_phase_index}_${startup_length}_${startup_power_level}_${waiting_time}"
-                        phases="{'startup':[{'name': 'startup','duration': $startup_length, 'power': 150}],'work':$work_phase}"
+                        phases="{'startup':[{'name': 'startup','duration': $startup_length, 'power': $startup_power_level}],'work':$work_phase}"
 
-                        if [ ! -f "$filename" ]; then 
+                        # if [ ! -f "$filename" ]; then 
 
                             echo Creating $filename
 
@@ -80,9 +80,9 @@ for scheduling_policy in "${scheduling_policies[@]}"; do
                                 >> jobs/job-${index}.sh
 
                             chmod +x jobs/job-${index}.sh
-                        else 
-                            echo "Skipping $filename"
-                        fi
+                        #else 
+                        #    echo "Skipping $filename"
+                        #fi
                     done
                 done
             done

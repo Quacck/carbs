@@ -70,17 +70,30 @@ class PeriodicPowerFunction(PowerFunction):
         if (length is None):
             raise ValueError("Periodic Power Function has not target length")
 
-        length_of_work: int = int(reduce(lambda total, phase: total + phase['duration'], phases['work'], 0))
+        length_of_startup: int = int(reduce(lambda total, phase: total + phase['duration'], phases['startup'], 0))
+
+        work_phase_to_add_index = 0
+        work_duration_added = length_of_startup
+        adjusted_work = []
+        while work_duration_added < length:
+            next_phase = phases['work'][work_phase_to_add_index % len(phases['work'])]
+            work_phase_to_add_index += 1
+
+            remaining_work_duration = length - work_duration_added
+            next_phase_adjusted: Phase = {**next_phase, **{"duration": min(next_phase['duration'], remaining_work_duration)}}
+            work_duration_added += next_phase_adjusted['duration']
+            adjusted_work += [next_phase_adjusted]
+
         adjusted_phases: ModelParameters = {
             'startup': phases['startup'],
-            'work': phases['work'] * max(int(length) // length_of_work, 1)
+            'work': adjusted_work
         }
 
         super().__init__(adjusted_phases, name)
 
 class MachineLearningParameters(TypedDict):
     """
-    Parameters for the helpter function that create ModelParameters for a ML Job, 
+    Parameters for the helper function that create ModelParameters for a ML Job, 
     as found out during my experiments
     """
     start_duration: float
