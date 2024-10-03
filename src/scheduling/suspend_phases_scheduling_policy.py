@@ -68,7 +68,11 @@ class SuspendSchedulingDynamicPowerPolicy:
         i = 0
         total_execution_time = 0
 
-        schedule = self.find_execution_times(self.carbon_model, task.waiting_time, task.power_consumption_function)
+        max_timeslot = task.waiting_time + task.task_length + task.arrival_time
+
+        carbon_model_beginning_at_job_arrival = self.carbon_model.subtrace(task.arrival_time, max_timeslot + 3600)
+
+        schedule = self.find_execution_times(carbon_model_beginning_at_job_arrival, max_timeslot, task.power_consumption_function)
 
         while i < len(schedule):
             if schedule[i] == 0:
@@ -140,6 +144,9 @@ class SuspendSchedulingDynamicPowerPolicy:
         seconds_per_timeslot = math.gcd(*times) if options["scale_time"] else 1
         
         SCALED_DEADLINE = DEADLINE // seconds_per_timeslot
+
+        print(f"scaled deadlines is: {SCALED_DEADLINE}, spt: {seconds_per_timeslot}")
+
         # Define the problem
         prob = pulp.LpProblem("StopResumeCarbonAwareScheduling", pulp.LpMinimize)
         
