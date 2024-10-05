@@ -72,7 +72,7 @@ class SuspendSchedulingDynamicPowerPolicy:
 
         carbon_model_beginning_at_job_arrival = self.carbon_model.subtrace(task.arrival_time, max_timeslot + 3600)
 
-        schedule = self.find_execution_times(carbon_model_beginning_at_job_arrival, max_timeslot, task.power_consumption_function)
+        schedule = self.find_execution_times(carbon_model_beginning_at_job_arrival, task.waiting_time + task.task_length, task.power_consumption_function)
 
         while i < len(schedule):
             if schedule[i] == 0:
