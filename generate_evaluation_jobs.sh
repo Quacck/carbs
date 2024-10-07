@@ -19,10 +19,11 @@ work_phases=( \
 startup_lengths=(0 300 600 1800)
 startup_power_levels=(100 200)
 waiting_times=(
-    4
+    6
     12
     24
     48
+    96
 )
 
 scheduling_policies=(
@@ -39,6 +40,7 @@ export GRB_LICENSE_FILE="/home/vincent.opitz/master-thesis/gurobi1103/gurobi.lic
 index=0
 
 mkdir -p jobs
+mkdir -p results/simulation/evaluation_jobs
 
 rm -r jobs/job-*
 
@@ -53,7 +55,7 @@ for scheduling_policy in "${scheduling_policies[@]}"; do
 
                         work_phase=${work_phases[$work_phase_index]}
 
-                        filename="results/simulation/different_lengths/${scheduling_policy}_${work_type}_${work_phase_index}_${startup_length}_${startup_power_level}_${waiting_time}"
+                        filename="results/simulation/evaluation_jobs/${scheduling_policy}_${work_type}_${work_phase_index}_${startup_length}_${startup_power_level}_${waiting_time}"
                         phases="{'startup':[{'name': 'startup','duration': $startup_length, 'power': $startup_power_level}],'work':$work_phase}"
 
                         if [ ! -f "$filename" ]; then 
@@ -68,12 +70,13 @@ for scheduling_policy in "${scheduling_policies[@]}"; do
                             echo 'export GRB_LICENSE_FILE="/home/vincent.opitz/master-thesis/gurobi1103/gurobi.lic"' >> jobs/job-${index}.sh
                             echo python3 src/run.py \
                                 --scheduling-policy $scheduling_policy \
-                                --task-trace different_lengths \
+                                --carbon-trace DE-hourly-start-july \
+                                --task-trace evaluation_jobs \
                                 --dynamic-power-draw \
                                 --dynamic-power-draw-type "$work_type" \
                                 --dynamic-power-draw-phases \"$phases\" \
                                 --carbon-policy oracle \
-                                --start-index 7000 \
+                                --start-index 0 \
                                 --w $waiting_time \
                                 --filename $filename \
                                 --repeat \

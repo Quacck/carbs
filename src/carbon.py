@@ -48,7 +48,12 @@ def get_carbon_model(carbon_trace: str, carbon_start_index: int, carbon_error:st
 
     # change this to 720 * 2 for two months, as some traces are longer than a month
 
-    df = df[17544+carbon_start_index:17544+carbon_start_index+(720*2)]
+    # TODO: this does not quite work well yet.
+    # the first implementation did an implicit +2 years on the start index,
+    # which doesn't work for the DE trace
+
+    # df = df[17544+carbon_start_index:17544+carbon_start_index+(720*2)]
+    df = df[carbon_start_index:carbon_start_index+(720*2)]
     #df = pd.concat([df.copy(), df[:1000].copy()]).reset_index()
     df = df[["carbon_intensity_avg", *(["datetime", "timestamp"] if extra_columns else [])]]
     df["carbon_intensity_avg"] /= 1000

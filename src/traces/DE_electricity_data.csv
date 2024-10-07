@@ -1,4 +1,4 @@
-zone,carbonIntensity,datetime,updatedAt,createdAt,emissionFactorType,isEstimated,estimationMethod
+zone,carbon_intensity_avg,datetime,updatedAt,createdAt,emissionFactorType,isEstimated,estimationMethod
 DE,367,2024-01-31T12:00:00.000Z,2024-02-01T10:47:07.716Z,2024-01-28T12:46:35.113Z,lifecycle,False,
 DE,354,2024-01-31T13:00:00.000Z,2024-02-01T10:47:07.716Z,2024-01-28T13:44:53.931Z,lifecycle,False,
 DE,356,2024-01-31T14:00:00.000Z,2024-02-01T10:47:07.716Z,2024-01-28T14:46:14.683Z,lifecycle,False,
