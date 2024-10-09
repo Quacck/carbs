@@ -172,125 +172,131 @@ class SuspendSchedulingDynamicPowerPolicy:
 
         # This one will count up the seconds since each start, so we can calculate how which phase we are in
         startup_time_progressed = pulp.LpVariable.dict("startup_time_progressed", (t for t in range(SCALED_DEADLINE)), lowBound=0, upBound=STARTUP_LENGTH, cat=pulp.LpInteger)
+        if options["use_progress"]:
+            # set time_progressed to 0, whenever we start
+            for t in range(SCALED_DEADLINE-1):
+                #https://download.aimms.com/aimms/download/manuals/AIMMS3OM_IntegerProgrammingTricks.pdf 
+                if (STARTUP_LENGTH > 0):
+                    if (t>0):
+                        # be bigger than the previous value IF starting
+                        prob += startup_time_progressed[t] >= startup_time_progressed[t-1] + 1 - (1 - starting[t]) * M
+                        prob += startup_time_progressed[t] <= startup_time_progressed[t-1] + 1 + (1 - starting[t]) * M
 
-        # set time_progressed to 0, whenever we start
-        for t in range(SCALED_DEADLINE-1):
-            #https://download.aimms.com/aimms/download/manuals/AIMMS3OM_IntegerProgrammingTricks.pdf 
-            if (STARTUP_LENGTH > 0):
-                if (t>0):
-                    # be bigger than the previous value IF starting
-                    prob += startup_time_progressed[t] >= startup_time_progressed[t-1] + 1 - (1 - starting[t]) * M
-                    prob += startup_time_progressed[t] <= startup_time_progressed[t-1] + 1 + (1 - starting[t]) * M
+                    # IF not starting, be 0
+                    prob += startup_time_progressed[t] <= starting[t] * M 
 
-                # IF not starting, be 0
-                prob += startup_time_progressed[t] <= starting[t] * M 
+                    # the general startup_progress needs the previous value, so we need to handle the first timeslot individually
+                    prob += startup_time_progressed[0] == starting[0]
 
-                # the general startup_progress needs the previous value, so we need to handle the first timeslot individually
-                prob += startup_time_progressed[0] == starting[0]
+            prob += work_time_progressed[0] == work[0]
+            for t in range(1, SCALED_DEADLINE):
+                if (t > 0):
+                    prob += work_time_progressed[t] == work_time_progressed[t-1] + work[t]
 
-        prob += work_time_progressed[0] == work[0]
-        for t in range(1, SCALED_DEADLINE):
-            if (t > 0):
-                prob += work_time_progressed[t] == work_time_progressed[t-1] + work[t]
-
-        # we need to linearize our phases.
-        # we do that by creating a boolean dict which will be true for each time the phase is active
-        phases = model.phases
 
         # avert your eyes, for this is cringe
         lin_function_dicts: Dict[str, Dict[str, Dict[str, pulp.LpVariable | float]]] = { }
 
-        running_index = 0
+        if options["linearize"]:
 
-        for phase_key, phases_of_key in phases.items():
-            duration = 0
-            if len(phases_of_key) == 0:
-                continue
+            # we need to linearize our phases.
+            # we do that by creating a boolean dict which will be true for each time the phase is active
+            phases = model.phases
+            running_index = 0
 
-            lin_function_dicts[phase_key] = { }
-
-            progress_variable = startup_time_progressed if phase_key == 'startup' else work_time_progressed
-            state_variable = starting if phase_key == 'startup' else work
-
-            for phase in phases_of_key:
-                if (phase['duration'] == 0):
+            for phase_key, phases_of_key in phases.items():
+                duration = 0
+                if len(phases_of_key) == 0:
                     continue
 
-                phase_name = phase['name'] + str(running_index)
-                running_index += 1
-                phase_variable_lower = pulp.LpVariable.dict(phase_name + "_lower", (t for t in range(SCALED_DEADLINE)), cat="Binary")
-                phase_variable_upper = pulp.LpVariable.dict(phase_name + "_upper", (t for t in range(SCALED_DEADLINE)), cat="Binary")
-                phase_variable = pulp.LpVariable.dict(phase_name, (t for t in range(SCALED_DEADLINE)), cat="Binary")
-                lin_function_dicts[phase_key][phase_name] = { }
-                lin_function_dicts[phase_key][phase_name]['variable'] = phase_variable
-                lin_function_dicts[phase_key][phase_name]['upper'] = phase_variable_upper
-                lin_function_dicts[phase_key][phase_name]['lower'] = phase_variable_lower
-                lin_function_dicts[phase_key][phase_name]['power'] = phase['power']
+                lin_function_dicts[phase_key] = { }
 
-                # bounds are [lower, upper) for each phase
-                lower_bound = max(duration, 0) 
-                upper_bound = duration + 1 + (int(phase["duration"]) / seconds_per_timeslot)
+                progress_variable = startup_time_progressed if phase_key == 'startup' else work_time_progressed
+                state_variable = starting if phase_key == 'startup' else work
 
-                # print(f'{phase_name} must be between {lower_bound} and {upper_bound}')
+                for phase in phases_of_key:
+                    if (phase['duration'] == 0):
+                        continue
 
-                for t in range(SCALED_DEADLINE):
+                    phase_name = phase['name'] + str(running_index)
+                    running_index += 1
+                    phase_variable_lower = pulp.LpVariable.dict(phase_name + "_lower", (t for t in range(SCALED_DEADLINE)), cat="Binary")
+                    phase_variable_upper = pulp.LpVariable.dict(phase_name + "_upper", (t for t in range(SCALED_DEADLINE)), cat="Binary")
+                    phase_variable = pulp.LpVariable.dict(phase_name, (t for t in range(SCALED_DEADLINE)), cat="Binary")
+                    lin_function_dicts[phase_key][phase_name] = { }
+                    lin_function_dicts[phase_key][phase_name]['variable'] = phase_variable
+                    lin_function_dicts[phase_key][phase_name]['upper'] = phase_variable_upper
+                    lin_function_dicts[phase_key][phase_name]['lower'] = phase_variable_lower
+                    lin_function_dicts[phase_key][phase_name]['power'] = phase['power']
 
-                    #https://math.stackexchange.com/a/3260529 this is basically magic
-                    # this activates the phase_variable within (lower, upper)
+                    # bounds are [lower, upper) for each phase
+                    lower_bound = max(duration, 0) 
+                    upper_bound = duration + 1 + (int(phase["duration"]) / seconds_per_timeslot)
 
-                    prob += progress_variable[t] - lower_bound <= M*phase_variable_lower[t]
-                    prob += lower_bound - progress_variable[t] <= M*(1-phase_variable_lower[t])
+                    for t in range(SCALED_DEADLINE):
 
-                    prob += upper_bound - progress_variable[t] <= M*phase_variable_upper[t]
-                    prob += progress_variable[t] - upper_bound <= M*(1-phase_variable_upper[t])
+                        #https://math.stackexchange.com/a/3260529 this is basically magic
+                        # this activates the phase_variable within (lower, upper)
 
-                    prob += phase_variable[t] >= phase_variable_lower[t] + phase_variable_upper[t] + state_variable[t] - 2
-                    prob += phase_variable[t] <= phase_variable_lower[t]
-                    prob += phase_variable[t] <= phase_variable_upper[t]
-                    prob += phase_variable[t] <= state_variable[t]
-                
-                duration += int(phase["duration"]) // seconds_per_timeslot
+                        prob += progress_variable[t] - lower_bound <= M*phase_variable_lower[t]
+                        prob += lower_bound - progress_variable[t] <= M*(1-phase_variable_lower[t])
 
-        # our carbon cost is equal to each phase being active * its power * the amount of carbon per timeslot
-        all_phase_variables_with_power = []
+                        prob += upper_bound - progress_variable[t] <= M*phase_variable_upper[t]
+                        prob += progress_variable[t] - upper_bound <= M*(1-phase_variable_upper[t])
 
-        for overarching_phase in lin_function_dicts.values():
-            for phase_entry in overarching_phase.values():
-                all_phase_variables_with_power.append((phase_entry['variable'], phase_entry['power']))
+                        prob += phase_variable[t] >= phase_variable_lower[t] + phase_variable_upper[t] + state_variable[t] - 2
+                        prob += phase_variable[t] <= phase_variable_lower[t]
+                        prob += phase_variable[t] <= phase_variable_upper[t]
+                        prob += phase_variable[t] <= state_variable[t]
+                    
+                    duration += int(phase["duration"]) // seconds_per_timeslot
 
-        def carbon_cost_at_timeslot(t: int) -> pulp.LpProblem:
-            return reduce(lambda problem, phase_tuple: problem + phase_tuple[0][t] * phase_tuple[1] * carbon_cost_at_time[t], all_phase_variables_with_power, pulp.LpAffineExpression())
+            # our carbon cost is equal to each phase being active * its power * the amount of carbon per timeslot
+            all_phase_variables_with_power = []
 
-        prob += pulp.lpSum([carbon_cost_at_timeslot(t) for t in range(SCALED_DEADLINE)]) 
-        # prob += pulp.lpSum([starting[t] * carbon_cost_at_time[t] + work[t] * carbon_cost_at_time[t] for t in range(DEADLINE)]) 
+            for overarching_phase in lin_function_dicts.values():
+                for phase_entry in overarching_phase.values():
+                    all_phase_variables_with_power.append((phase_entry['variable'], phase_entry['power']))
+
+            def carbon_cost_at_timeslot(t: int) -> pulp.LpProblem:
+                return reduce(lambda problem, phase_tuple: problem + phase_tuple[0][t] * phase_tuple[1] * carbon_cost_at_time[t], all_phase_variables_with_power, pulp.LpAffineExpression())
+
+        if options["linearize"]:
+            prob += pulp.lpSum([carbon_cost_at_timeslot(t) for t in range(SCALED_DEADLINE)]) 
+        else:
+            if options["use_startup"]:
+                prob += pulp.lpSum([starting[t] * carbon_cost_at_time[t] + work[t] * carbon_cost_at_time[t] for t in range(SCALED_DEADLINE)]) 
+            else: 
+                prob += pulp.lpSum([work[t] * carbon_cost_at_time[t] for t in range(SCALED_DEADLINE)]) 
 
 
         # spend enough time processing
         prob += pulp.lpSum(work[t] for t in range(STARTUP_LENGTH, SCALED_DEADLINE)) == WORK_LENGTH
         prob += pulp.lpSum(work[t] for t in range(STARTUP_LENGTH)) == 0
 
-        for t in range(SCALED_DEADLINE - 1):
-            # Ensure the job undergoes the startup phase whenever it resumes
-            # if [0 , 1], this will be 1
-            # t1   t2
-            # 0     0 => 0
-            # 0     1 => 1 
-            # 1     0 => -1 / 0
-            prob += startup_finished[t] >= work[t + 1] - work[t]
+        if options["use_startup"]:
+            for t in range(SCALED_DEADLINE - 1):
+                # Ensure the job undergoes the startup phase whenever it resumes
+                # if [0 , 1], this will be 1
+                # t1   t2
+                # 0     0 => 0
+                # 0     1 => 1 
+                # 1     0 => -1 / 0
+                prob += startup_finished[t] >= work[t + 1] - work[t]
 
-            # we can not be in startup and work at the same time
-            prob += startup_finished[t] + work[t] <= 1
-            prob += starting[t] + work[t] <= 1
+                # we can not be in startup and work at the same time
+                prob += startup_finished[t] + work[t] <= 1
+                prob += starting[t] + work[t] <= 1
 
-        if (STARTUP_LENGTH > 0):
-            for i in range(STARTUP_LENGTH-1, SCALED_DEADLINE):
-                prob += pulp.lpSum([starting[i - j] for j in range(STARTUP_LENGTH)]) >= STARTUP_LENGTH * startup_finished[i], f"Contiguity_{i}"
+            if (STARTUP_LENGTH > 0):
+                for i in range(STARTUP_LENGTH-1, SCALED_DEADLINE):
+                    prob += pulp.lpSum([starting[i - j] for j in range(STARTUP_LENGTH)]) >= STARTUP_LENGTH * startup_finished[i], f"Contiguity_{i}"
 
 
         # The solution so far seems to take a really long time, let's also add a maximum amount of startups to hopefully reduce the search space
         prob += pulp.lpSum([startup_finished[j] for j in range(SCALED_DEADLINE)]) <= 5, f"Max_starts"
 
-        solver = pulp.GUROBI_CMD(timeLimit=options["timelimit"], threads=256)
+        solver = pulp.GUROBI_CMD(timeLimit=options["timelimit"], threads=4)
 
         prob.solve(solver)
 
