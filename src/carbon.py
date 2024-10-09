@@ -55,7 +55,7 @@ def get_carbon_model(carbon_trace: str, carbon_start_index: int, carbon_error:st
     # df = df[17544+carbon_start_index:17544+carbon_start_index+(720*2)]
     df = df[carbon_start_index:carbon_start_index+(720*2)]
     #df = pd.concat([df.copy(), df[:1000].copy()]).reset_index()
-    df = df[["carbon_intensity_avg", *(["datetime", "timestamp"] if extra_columns else [])]]
+    df = df[["carbon_intensity_avg", *(["datetime"] if extra_columns else [])]]
     df["carbon_intensity_avg"] /= 1000
     c = CarbonModel(carbon_trace, df, carbon_start_index, carbon_error)
     return c

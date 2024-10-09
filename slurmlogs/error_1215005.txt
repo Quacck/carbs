@@ -1,0 +1,6 @@
+slurmstepd-cp01: error: pyxis: container start failed with error code: 1
+slurmstepd-cp01: error: pyxis: printing enroot log file:
+slurmstepd-cp01: error: pyxis:     enroot-switchroot: failed to execute: /bin/bash: Exec format error
+slurmstepd-cp01: error: pyxis: couldn't start container
+slurmstepd-cp01: error: spank: required plugin spank_pyxis.so: task_init() failed with rc=-1
+slurmstepd-cp01: error: Failed to invoke spank plugin stack

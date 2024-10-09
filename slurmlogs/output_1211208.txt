@@ -1,0 +1,1233 @@
+Executing: jobs/job-302.sh
+Set parameter WLSAccessID
+Set parameter WLSSecret
+Set parameter LicenseID to value 2562092
+Set parameter TimeLimit to value 1200
+Set parameter LogFile to value "gurobi.log"
+Set parameter Threads to value 256
+Using license file /home/vincent.opitz/master-thesis/gurobi1103/gurobi.lic
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+
+Gurobi Optimizer version 11.0.3 build v11.0.3rc0 (linux64 - "Debian GNU/Linux 12 (bookworm)")
+Copyright (c) 2024, Gurobi Optimization, LLC
+
+Read LP format model from file /tmp/c5d6dad3357c43aaaeb65cccd96c530c-pulp.lp
+Reading time = 0.01 seconds
+OBJ: 3894 rows, 1716 columns, 9336 nonzeros
+
+CPU model: AMD EPYC 7742 64-Core Processor, instruction set [SSE2|AVX|AVX2]
+Thread count: 128 physical cores, 256 logical processors, using up to 256 threads
+
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+Optimize a model with 3894 rows, 1716 columns and 9336 nonzeros
+Model fingerprint: 0xd2a7f95f
+Variable types: 0 continuous, 1716 integer (1560 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 3e+02]
+  Objective range  [3e-03, 6e-03]
+  Bounds range     [1e+00, 1e+01]
+  RHS range        [1e+00, 3e+02]
+Presolve removed 3409 rows and 1232 columns
+Presolve time: 0.04s
+Presolved: 485 rows, 484 columns, 1723 nonzeros
+Variable types: 0 continuous, 484 integer (449 binary)
+Found heuristic solution: objective 0.0626906
+Found heuristic solution: objective 0.0474806
+
+Root relaxation: objective 1.965546e-02, 204 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.01966    0   88    0.04748    0.01966  58.6%     -    0s
+     0     0    0.02800    0   40    0.04748    0.02800  41.0%     -    0s
+     0     0    0.03143    0  168    0.04748    0.03143  33.8%     -    0s
+H    0     0                       0.0415517    0.03147  24.3%     -    0s
+H    0     0                       0.0413856    0.03147  24.0%     -    0s
+H    0     0                       0.0373933    0.03147  15.9%     -    0s
+
+Cutting planes:
+  Cover: 5
+  Implied bound: 1
+  Clique: 60
+  Flow cover: 33
+  Zero half: 6
+  Mod-K: 3
+  RLT: 17
+  Relax-and-lift: 1
+
+Explored 1 nodes (366 simplex iterations) in 0.19 seconds (0.07 work units)
+Thread count was 256 (of 256 available processors)
+
+Solution count 5: 0.0373933 0.0413856 0.0415517 ... 0.0626906
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.739333333332e-02, best bound 3.739333333332e-02, gap 0.0000%
+
+Wrote result file '/tmp/c5d6dad3357c43aaaeb65cccd96c530c-pulp.sol'
+
+Set parameter WLSAccessID
+Set parameter WLSSecret
+Set parameter LicenseID to value 2562092
+Set parameter TimeLimit to value 1200
+Set parameter LogFile to value "gurobi.log"
+Set parameter Threads to value 256
+Using license file /home/vincent.opitz/master-thesis/gurobi1103/gurobi.lic
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+
+Gurobi Optimizer version 11.0.3 build v11.0.3rc0 (linux64 - "Debian GNU/Linux 12 (bookworm)")
+Copyright (c) 2024, Gurobi Optimization, LLC
+
+Read LP format model from file /tmp/93316ceb9a394afda71c6e2350275c4e-pulp.lp
+Reading time = 0.01 seconds
+OBJ: 4194 rows, 1848 columns, 10056 nonzeros
+
+CPU model: AMD EPYC 7742 64-Core Processor, instruction set [SSE2|AVX|AVX2]
+Thread count: 128 physical cores, 256 logical processors, using up to 256 threads
+
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+Optimize a model with 4194 rows, 1848 columns and 10056 nonzeros
+Model fingerprint: 0x17916557
+Variable types: 0 continuous, 1848 integer (1680 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 3e+02]
+  Objective range  [2e-03, 5e-03]
+  Bounds range     [1e+00, 2e+01]
+  RHS range        [1e+00, 4e+02]
+Presolve removed 3685 rows and 1340 columns
+Presolve time: 0.05s
+Presolved: 509 rows, 508 columns, 1819 nonzeros
+Variable types: 0 continuous, 508 integer (473 binary)
+Found heuristic solution: objective 0.1079651
+Found heuristic solution: objective 0.1003471
+Found heuristic solution: objective 0.0683318
+
+Root relaxation: objective 3.648430e-02, 240 iterations, 0.01 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.03648    0  113    0.06833    0.03648  46.6%     -    0s
+     0     0    0.05144    0  167    0.06833    0.05144  24.7%     -    0s
+H    0     0                       0.0643787    0.05150  20.0%     -    0s
+*    0     0               0       0.0603871    0.06039  0.00%     -    0s
+
+Cutting planes:
+  Gomory: 47
+  Cover: 15
+  Implied bound: 3
+  Clique: 88
+  MIR: 8
+  Flow cover: 60
+  Zero half: 3
+  Network: 2
+  RLT: 3
+  Relax-and-lift: 1
+
+Explored 1 nodes (467 simplex iterations) in 0.20 seconds (0.07 work units)
+Thread count was 256 (of 256 available processors)
+
+Solution count 5: 0.0603871 0.0643787 0.0683318 ... 0.107965
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.038708333328e-02, best bound 6.038708333328e-02, gap 0.0000%
+
+Wrote result file '/tmp/93316ceb9a394afda71c6e2350275c4e-pulp.sol'
+
+Set parameter WLSAccessID
+Set parameter WLSSecret
+Set parameter LicenseID to value 2562092
+Set parameter TimeLimit to value 1200
+Set parameter LogFile to value "gurobi.log"
+Set parameter Threads to value 256
+Using license file /home/vincent.opitz/master-thesis/gurobi1103/gurobi.lic
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+
+Gurobi Optimizer version 11.0.3 build v11.0.3rc0 (linux64 - "Debian GNU/Linux 12 (bookworm)")
+Copyright (c) 2024, Gurobi Optimization, LLC
+
+Read LP format model from file /tmp/205ec81cfa8d4126ab3ab489125606ee-pulp.lp
+Reading time = 0.01 seconds
+OBJ: 4494 rows, 1980 columns, 10776 nonzeros
+
+CPU model: AMD EPYC 7742 64-Core Processor, instruction set [SSE2|AVX|AVX2]
+Thread count: 128 physical cores, 256 logical processors, using up to 256 threads
+
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+Optimize a model with 4494 rows, 1980 columns and 10776 nonzeros
+Model fingerprint: 0x541e71e7
+Variable types: 0 continuous, 1980 integer (1800 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 4e+02]
+  Objective range  [3e-03, 7e-03]
+  Bounds range     [1e+00, 4e+01]
+  RHS range        [1e+00, 4e+02]
+Presolve removed 3961 rows and 1448 columns
+Presolve time: 0.06s
+Presolved: 533 rows, 532 columns, 1915 nonzeros
+Variable types: 0 continuous, 532 integer (497 binary)
+Found heuristic solution: objective 0.2005301
+Found heuristic solution: objective 0.1653556
+Found heuristic solution: objective 0.1102157
+
+Root relaxation: objective 6.717401e-02, 251 iterations, 0.01 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.06717    0  116    0.11022    0.06717  39.1%     -    0s
+H    0     0                       0.1029694    0.06717  34.8%     -    0s
+     0     0    0.08653    0  167    0.10297    0.08653  16.0%     -    0s
+H    0     0                       0.1016000    0.10160  0.00%     -    0s
+     0     0          -    0         0.10160    0.10160  0.00%     -    0s
+
+Cutting planes:
+  Gomory: 50
+  Cover: 25
+  Implied bound: 9
+  Clique: 101
+  MIR: 19
+  StrongCG: 4
+  Flow cover: 55
+  Zero half: 6
+  Network: 3
+  RLT: 7
+  Relax-and-lift: 6
+
+Explored 1 nodes (549 simplex iterations) in 0.21 seconds (0.08 work units)
+Thread count was 256 (of 256 available processors)
+
+Solution count 5: 0.1016 0.102969 0.110216 ... 0.20053
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.016000000000e-01, best bound 1.016000000000e-01, gap 0.0000%
+
+Wrote result file '/tmp/205ec81cfa8d4126ab3ab489125606ee-pulp.sol'
+
+Set parameter WLSAccessID
+Set parameter WLSSecret
+Set parameter LicenseID to value 2562092
+Set parameter TimeLimit to value 1200
+Set parameter LogFile to value "gurobi.log"
+Set parameter Threads to value 256
+Using license file /home/vincent.opitz/master-thesis/gurobi1103/gurobi.lic
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+
+Gurobi Optimizer version 11.0.3 build v11.0.3rc0 (linux64 - "Debian GNU/Linux 12 (bookworm)")
+Copyright (c) 2024, Gurobi Optimization, LLC
+
+Read LP format model from file /tmp/b7257e9d99734c2a9a6a4ce936c047be-pulp.lp
+Reading time = 0.01 seconds
+OBJ: 4044 rows, 1782 columns, 9696 nonzeros
+
+CPU model: AMD EPYC 7742 64-Core Processor, instruction set [SSE2|AVX|AVX2]
+Thread count: 128 physical cores, 256 logical processors, using up to 256 threads
+
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+Optimize a model with 4044 rows, 1782 columns and 9696 nonzeros
+Model fingerprint: 0x5846b841
+Variable types: 0 continuous, 1782 integer (1620 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 3e+02]
+  Objective range  [3e-03, 7e-03]
+  Bounds range     [1e+00, 1e+01]
+  RHS range        [1e+00, 3e+02]
+Presolve removed 3537 rows and 1276 columns
+Presolve time: 0.04s
+Presolved: 507 rows, 506 columns, 1799 nonzeros
+Variable types: 0 continuous, 506 integer (469 binary)
+Found heuristic solution: objective 0.0889722
+Found heuristic solution: objective 0.0650900
+Found heuristic solution: objective 0.0492572
+
+Root relaxation: objective 1.946910e-02, 227 iterations, 0.01 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.01947    0  109    0.04926    0.01947  60.5%     -    0s
+     0     0    0.02800    0   41    0.04926    0.02800  43.2%     -    0s
+H    0     0                       0.0397622    0.02953  25.7%     -    0s
+H    0     0                       0.0394661    0.02953  25.2%     -    0s
+     0     0    0.03207    0  156    0.03947    0.03207  18.7%     -    0s
+H    0     0                       0.0373933    0.03207  14.2%     -    0s
+     0     0    0.03348    0   84    0.03739    0.03348  10.5%     -    0s
+     0     0     cutoff    0         0.03739    0.03739  0.00%     -    0s
+
+Cutting planes:
+  Gomory: 1
+  Implied bound: 3
+  Clique: 33
+  Flow cover: 13
+  RLT: 13
+  Relax-and-lift: 1
+
+Explored 1 nodes (440 simplex iterations) in 0.17 seconds (0.06 work units)
+Thread count was 256 (of 256 available processors)
+
+Solution count 6: 0.0373933 0.0394661 0.0397622 ... 0.0889722
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.739333333332e-02, best bound 3.739333333332e-02, gap 0.0000%
+
+Wrote result file '/tmp/b7257e9d99734c2a9a6a4ce936c047be-pulp.sol'
+
+Set parameter WLSAccessID
+Set parameter WLSSecret
+Set parameter LicenseID to value 2562092
+Set parameter TimeLimit to value 1200
+Set parameter LogFile to value "gurobi.log"
+Set parameter Threads to value 256
+Using license file /home/vincent.opitz/master-thesis/gurobi1103/gurobi.lic
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+
+Gurobi Optimizer version 11.0.3 build v11.0.3rc0 (linux64 - "Debian GNU/Linux 12 (bookworm)")
+Copyright (c) 2024, Gurobi Optimization, LLC
+
+Read LP format model from file /tmp/da9497e86eca4435ac3899ff1d29f1cd-pulp.lp
+Reading time = 0.01 seconds
+OBJ: 4344 rows, 1914 columns, 10416 nonzeros
+
+CPU model: AMD EPYC 7742 64-Core Processor, instruction set [SSE2|AVX|AVX2]
+Thread count: 128 physical cores, 256 logical processors, using up to 256 threads
+
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+Optimize a model with 4344 rows, 1914 columns and 10416 nonzeros
+Model fingerprint: 0xfce5bfad
+Variable types: 0 continuous, 1914 integer (1740 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 3e+02]
+  Objective range  [2e-03, 6e-03]
+  Bounds range     [1e+00, 2e+01]
+  RHS range        [1e+00, 4e+02]
+Presolve removed 3813 rows and 1384 columns
+Presolve time: 0.05s
+Presolved: 531 rows, 530 columns, 1895 nonzeros
+Variable types: 0 continuous, 530 integer (493 binary)
+Found heuristic solution: objective 0.1455119
+Found heuristic solution: objective 0.1019478
+Found heuristic solution: objective 0.0707162
+
+Root relaxation: objective 3.637509e-02, 257 iterations, 0.01 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.03638    0  138    0.07072    0.03638  48.6%     -    0s
+     0     0    0.05215    0  156    0.07072    0.05215  26.3%     -    0s
+H    0     0                       0.0614277    0.05220  15.0%     -    0s
+H    0     0                       0.0603871    0.06039  0.00%     -    0s
+     0     0          -    0         0.06039    0.06039  0.00%     -    0s
+
+Cutting planes:
+  Gomory: 42
+  Cover: 15
+  Implied bound: 7
+  Clique: 90
+  MIR: 6
+  Flow cover: 64
+  Zero half: 5
+  Network: 2
+  RLT: 5
+
+Explored 1 nodes (527 simplex iterations) in 0.19 seconds (0.07 work units)
+Thread count was 256 (of 256 available processors)
+
+Solution count 5: 0.0603871 0.0614277 0.0707162 ... 0.145512
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.038708333328e-02, best bound 6.038708333328e-02, gap 0.0000%
+
+Wrote result file '/tmp/da9497e86eca4435ac3899ff1d29f1cd-pulp.sol'
+
+Set parameter WLSAccessID
+Set parameter WLSSecret
+Set parameter LicenseID to value 2562092
+Set parameter TimeLimit to value 1200
+Set parameter LogFile to value "gurobi.log"
+Set parameter Threads to value 256
+Using license file /home/vincent.opitz/master-thesis/gurobi1103/gurobi.lic
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+
+Gurobi Optimizer version 11.0.3 build v11.0.3rc0 (linux64 - "Debian GNU/Linux 12 (bookworm)")
+Copyright (c) 2024, Gurobi Optimization, LLC
+
+Read LP format model from file /tmp/f63921db5be442e9aa7cf065f6f3296f-pulp.lp
+Reading time = 0.01 seconds
+OBJ: 4644 rows, 2046 columns, 11136 nonzeros
+
+CPU model: AMD EPYC 7742 64-Core Processor, instruction set [SSE2|AVX|AVX2]
+Thread count: 128 physical cores, 256 logical processors, using up to 256 threads
+
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+Optimize a model with 4644 rows, 2046 columns and 11136 nonzeros
+Model fingerprint: 0xf981e08f
+Variable types: 0 continuous, 2046 integer (1860 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 4e+02]
+  Objective range  [3e-03, 8e-03]
+  Bounds range     [1e+00, 4e+01]
+  RHS range        [1e+00, 4e+02]
+Presolve removed 4089 rows and 1492 columns
+Presolve time: 0.06s
+Presolved: 555 rows, 554 columns, 1991 nonzeros
+Variable types: 0 continuous, 554 integer (517 binary)
+Found heuristic solution: objective 0.2461301
+Found heuristic solution: objective 0.1672917
+Found heuristic solution: objective 0.1129546
+
+Root relaxation: objective 6.717401e-02, 241 iterations, 0.01 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.06717    0  116    0.11295    0.06717  40.5%     -    0s
+H    0     0                       0.1057083    0.06717  36.5%     -    0s
+     0     0    0.08725    0  172    0.10571    0.08725  17.5%     -    0s
+     0     0    0.08764    0  156    0.10571    0.08764  17.1%     -    0s
+*    0     0               0       0.1016000    0.10160  0.00%     -    0s
+
+Cutting planes:
+  Gomory: 46
+  Cover: 23
+  Implied bound: 10
+  Clique: 98
+  MIR: 17
+  StrongCG: 3
+  Flow cover: 49
+  Zero half: 6
+  Network: 3
+  RLT: 8
+  BQP: 1
+
+Explored 1 nodes (523 simplex iterations) in 0.21 seconds (0.08 work units)
+Thread count was 256 (of 256 available processors)
+
+Solution count 5: 0.1016 0.105708 0.112955 ... 0.24613
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.016000000000e-01, best bound 1.016000000000e-01, gap 0.0000%
+
+Wrote result file '/tmp/f63921db5be442e9aa7cf065f6f3296f-pulp.sol'
+
+Set parameter WLSAccessID
+Set parameter WLSSecret
+Set parameter LicenseID to value 2562092
+Set parameter TimeLimit to value 1200
+Set parameter LogFile to value "gurobi.log"
+Set parameter Threads to value 256
+Using license file /home/vincent.opitz/master-thesis/gurobi1103/gurobi.lic
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+
+Gurobi Optimizer version 11.0.3 build v11.0.3rc0 (linux64 - "Debian GNU/Linux 12 (bookworm)")
+Copyright (c) 2024, Gurobi Optimization, LLC
+
+Read LP format model from file /tmp/75c8464abd5344edb6f54f948d2b8dac-pulp.lp
+Reading time = 0.01 seconds
+OBJ: 4194 rows, 1848 columns, 10056 nonzeros
+
+CPU model: AMD EPYC 7742 64-Core Processor, instruction set [SSE2|AVX|AVX2]
+Thread count: 128 physical cores, 256 logical processors, using up to 256 threads
+
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+Optimize a model with 4194 rows, 1848 columns and 10056 nonzeros
+Model fingerprint: 0x0441733c
+Variable types: 0 continuous, 1848 integer (1680 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 3e+02]
+  Objective range  [3e-03, 8e-03]
+  Bounds range     [1e+00, 1e+01]
+  RHS range        [1e+00, 3e+02]
+Presolve removed 3670 rows and 1325 columns
+Presolve time: 0.04s
+Presolved: 524 rows, 523 columns, 1861 nonzeros
+Variable types: 0 continuous, 523 integer (485 binary)
+Found heuristic solution: objective 0.1041800
+Found heuristic solution: objective 0.0660867
+Found heuristic solution: objective 0.0508633
+
+Root relaxation: objective 1.940181e-02, 237 iterations, 0.01 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.01940    0  131    0.05086    0.01940  61.9%     -    0s
+     0     0    0.02800    0   42    0.05086    0.02800  45.0%     -    0s
+H    0     0                       0.0454128    0.03045  33.0%     -    0s
+     0     0    0.03045    0   42    0.04541    0.03045  33.0%     -    0s
+     0     0    0.03232    0  147    0.04541    0.03232  28.8%     -    0s
+H    0     0                       0.0373933    0.03237  13.4%     -    0s
+
+Cutting planes:
+  Implied bound: 2
+  Clique: 36
+  Flow cover: 13
+  Zero half: 1
+  Mod-K: 1
+  RLT: 20
+  Relax-and-lift: 1
+
+Explored 1 nodes (416 simplex iterations) in 0.22 seconds (0.08 work units)
+Thread count was 256 (of 256 available processors)
+
+Solution count 5: 0.0373933 0.0454128 0.0508633 ... 0.10418
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.739333333332e-02, best bound 3.739333333332e-02, gap 0.0000%
+
+Wrote result file '/tmp/75c8464abd5344edb6f54f948d2b8dac-pulp.sol'
+
+Set parameter WLSAccessID
+Set parameter WLSSecret
+Set parameter LicenseID to value 2562092
+Set parameter TimeLimit to value 1200
+Set parameter LogFile to value "gurobi.log"
+Set parameter Threads to value 256
+Using license file /home/vincent.opitz/master-thesis/gurobi1103/gurobi.lic
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+
+Gurobi Optimizer version 11.0.3 build v11.0.3rc0 (linux64 - "Debian GNU/Linux 12 (bookworm)")
+Copyright (c) 2024, Gurobi Optimization, LLC
+
+Read LP format model from file /tmp/e1e7bef404ad4f7a809dd12a13e5ac6d-pulp.lp
+Reading time = 0.01 seconds
+OBJ: 4494 rows, 1980 columns, 10776 nonzeros
+
+CPU model: AMD EPYC 7742 64-Core Processor, instruction set [SSE2|AVX|AVX2]
+Thread count: 128 physical cores, 256 logical processors, using up to 256 threads
+
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+Optimize a model with 4494 rows, 1980 columns and 10776 nonzeros
+Model fingerprint: 0x542ee393
+Variable types: 0 continuous, 1980 integer (1800 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 4e+02]
+  Objective range  [2e-03, 7e-03]
+  Bounds range     [1e+00, 2e+01]
+  RHS range        [1e+00, 4e+02]
+Presolve removed 3946 rows and 1433 columns
+Presolve time: 0.05s
+Presolved: 548 rows, 547 columns, 1957 nonzeros
+Variable types: 0 continuous, 547 integer (509 binary)
+Found heuristic solution: objective 0.1678164
+Found heuristic solution: objective 0.1035486
+Found heuristic solution: objective 0.0728249
+
+Root relaxation: objective 3.637509e-02, 277 iterations, 0.01 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.03638    0  139    0.07282    0.03638  50.1%     -    0s
+H    0     0                       0.0714040    0.03638  49.1%     -    0s
+     0     0    0.05288    0  146    0.07140    0.05288  25.9%     -    0s
+H    0     0                       0.0677177    0.05293  21.8%     -    0s
+H    0     0                       0.0663199    0.06039  8.95%     -    0s
+H    0     0                       0.0603871    0.06039  0.00%     -    0s
+     0     0          -    0         0.06039    0.06039  0.00%     -    0s
+
+Cutting planes:
+  Gomory: 39
+  Cover: 15
+  Implied bound: 9
+  Clique: 87
+  MIR: 7
+  Flow cover: 59
+  Zero half: 3
+  Network: 2
+  RLT: 7
+  Relax-and-lift: 1
+
+Explored 1 nodes (498 simplex iterations) in 0.19 seconds (0.07 work units)
+Thread count was 256 (of 256 available processors)
+
+Solution count 7: 0.0603871 0.0663199 0.0677177 ... 0.167816
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.038708333328e-02, best bound 6.038708333328e-02, gap 0.0000%
+
+Wrote result file '/tmp/e1e7bef404ad4f7a809dd12a13e5ac6d-pulp.sol'
+
+Set parameter WLSAccessID
+Set parameter WLSSecret
+Set parameter LicenseID to value 2562092
+Set parameter TimeLimit to value 1200
+Set parameter LogFile to value "gurobi.log"
+Set parameter Threads to value 256
+Using license file /home/vincent.opitz/master-thesis/gurobi1103/gurobi.lic
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+
+Gurobi Optimizer version 11.0.3 build v11.0.3rc0 (linux64 - "Debian GNU/Linux 12 (bookworm)")
+Copyright (c) 2024, Gurobi Optimization, LLC
+
+Read LP format model from file /tmp/75b8a62260f94276aa81cc1ec8688b7d-pulp.lp
+Reading time = 0.01 seconds
+OBJ: 4794 rows, 2112 columns, 11496 nonzeros
+
+CPU model: AMD EPYC 7742 64-Core Processor, instruction set [SSE2|AVX|AVX2]
+Thread count: 128 physical cores, 256 logical processors, using up to 256 threads
+
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+Optimize a model with 4794 rows, 2112 columns and 11496 nonzeros
+Model fingerprint: 0x6204b514
+Variable types: 0 continuous, 2112 integer (1920 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 4e+02]
+  Objective range  [3e-03, 1e-02]
+  Bounds range     [1e+00, 4e+01]
+  RHS range        [1e+00, 4e+02]
+Presolve removed 4222 rows and 1541 columns
+Presolve time: 0.06s
+Presolved: 572 rows, 571 columns, 2053 nonzeros
+Variable types: 0 continuous, 571 integer (533 binary)
+Found heuristic solution: objective 0.3113514
+Found heuristic solution: objective 0.1692278
+Found heuristic solution: objective 0.1164144
+
+Root relaxation: objective 6.717401e-02, 251 iterations, 0.01 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.06717    0  117    0.11641    0.06717  42.3%     -    0s
+H    0     0                       0.1131014    0.06717  40.6%     -    0s
+H    0     0                       0.1118458    0.06717  39.9%     -    0s
+     0     0    0.08878    0  146    0.11185    0.08878  20.6%     -    0s
+H    0     0                       0.1075014    0.08881  17.4%     -    0s
+     0     0    0.10034    0   46    0.10750    0.10034  6.66%     -    0s
+H    0     0                       0.1031370    0.10038  2.67%     -    0s
+H    0     0                       0.1016000    0.10160  0.00%     -    0s
+     0     0          -    0         0.10160    0.10160  0.00%     -    0s
+
+Cutting planes:
+  Gomory: 31
+  Cover: 24
+  Implied bound: 6
+  Clique: 94
+  MIR: 13
+  StrongCG: 3
+  Flow cover: 40
+  Zero half: 4
+  Network: 2
+  RLT: 7
+  Relax-and-lift: 1
+  BQP: 1
+
+Explored 1 nodes (557 simplex iterations) in 0.23 seconds (0.09 work units)
+Thread count was 256 (of 256 available processors)
+
+Solution count 8: 0.1016 0.103137 0.107501 ... 0.311351
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.016000000000e-01, best bound 1.016000000000e-01, gap 0.0000%
+
+Wrote result file '/tmp/75b8a62260f94276aa81cc1ec8688b7d-pulp.sol'
+
+Start Experiments results/simulation/different_lengths/suspend-resume_constant-from-periodic-phases_0_300_200_12
+Started Loading Tasks for different_lengths
+job_args: {'startup': [{'name': 'startup', 'duration': 300, 'power': 200}], 'work': [{'name': 'high', 'power': 200, 'duration': 3600}, {'name': 'low', 'power': 100, 'duration': 3600}]}
+job_args: {'startup': [{'name': 'startup', 'duration': 300, 'power': 200}], 'work': [{'name': 'high', 'power': 200, 'duration': 3600}, {'name': 'low', 'power': 100, 'duration': 3600}]}
+job_args: {'startup': [{'name': 'startup', 'duration': 300, 'power': 200}], 'work': [{'name': 'high', 'power': 200, 'duration': 3600}, {'name': 'low', 'power': 100, 'duration': 3600}]}
+job_args: {'startup': [{'name': 'startup', 'duration': 300, 'power': 200}], 'work': [{'name': 'high', 'power': 200, 'duration': 3600}, {'name': 'low', 'power': 100, 'duration': 3600}]}
+job_args: {'startup': [{'name': 'startup', 'duration': 300, 'power': 200}], 'work': [{'name': 'high', 'power': 200, 'duration': 3600}, {'name': 'low', 'power': 100, 'duration': 3600}]}
+job_args: {'startup': [{'name': 'startup', 'duration': 300, 'power': 200}], 'work': [{'name': 'high', 'power': 200, 'duration': 3600}, {'name': 'low', 'power': 100, 'duration': 3600}]}
+job_args: {'startup': [{'name': 'startup', 'duration': 300, 'power': 200}], 'work': [{'name': 'high', 'power': 200, 'duration': 3600}, {'name': 'low', 'power': 100, 'duration': 3600}]}
+job_args: {'startup': [{'name': 'startup', 'duration': 300, 'power': 200}], 'work': [{'name': 'high', 'power': 200, 'duration': 3600}, {'name': 'low', 'power': 100, 'duration': 3600}]}
+job_args: {'startup': [{'name': 'startup', 'duration': 300, 'power': 200}], 'work': [{'name': 'high', 'power': 200, 'duration': 3600}, {'name': 'low', 'power': 100, 'duration': 3600}]}
+Finding scheduler for oracle suspend-resume with dynamic power
+scaled deadlines is: 156, spt: 300
+Status: Optimal
+scaled deadlines is: 168, spt: 300
+Status: Optimal
+scaled deadlines is: 180, spt: 300
+Status: Optimal
+scaled deadlines is: 162, spt: 300
+Status: Optimal
+scaled deadlines is: 174, spt: 300
+Status: Optimal
+scaled deadlines is: 186, spt: 300
+Status: Optimal
+scaled deadlines is: 168, spt: 300
+Status: Optimal
+scaled deadlines is: 180, spt: 300
+Status: Optimal
+scaled deadlines is: 192, spt: 300
+Status: Optimal
+Saving details to results/simulation/different_lengths/suspend-resume_constant-from-periodic-phases_0_300_200_12_details
+Saving runtime to results/simulation/different_lengths/runtime-suspend-resume-7000-oracle-AU-SA-0-12.csv
+Saving Results to results/simulation/different_lengths/suspend-resume_constant-from-periodic-phases_0_300_200_12
+Finish Experiments different_lengths - AU-SA-suspend-resume-oracle-12-True, and 0 reserved
+Executing: jobs/job-384.sh
+Set parameter WLSAccessID
+Set parameter WLSSecret
+Set parameter LicenseID to value 2562092
+Set parameter TimeLimit to value 1200
+Set parameter LogFile to value "gurobi.log"
+Set parameter Threads to value 256
+Using license file /home/vincent.opitz/master-thesis/gurobi1103/gurobi.lic
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+
+Gurobi Optimizer version 11.0.3 build v11.0.3rc0 (linux64 - "Debian GNU/Linux 12 (bookworm)")
+Copyright (c) 2024, Gurobi Optimization, LLC
+
+Read LP format model from file /tmp/3b22eb25726a4845894a40d768899fe1-pulp.lp
+Reading time = 0.01 seconds
+OBJ: 2444 rows, 1078 columns, 5856 nonzeros
+
+CPU model: AMD EPYC 7742 64-Core Processor, instruction set [SSE2|AVX|AVX2]
+Thread count: 128 physical cores, 256 logical processors, using up to 256 threads
+
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+Optimize a model with 2444 rows, 1078 columns and 5856 nonzeros
+Model fingerprint: 0x11c6fe8c
+Variable types: 0 continuous, 1078 integer (1078 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [3e-03, 2e-02]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+02]
+Presolve removed 2346 rows and 933 columns
+Presolve time: 0.04s
+Presolved: 98 rows, 145 columns, 480 nonzeros
+Variable types: 0 continuous, 145 integer (145 binary)
+Found heuristic solution: objective 0.0065283
+
+Root relaxation: objective 4.822222e-03, 6 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.00482    0    2    0.00653    0.00482  26.1%     -    0s
+*    0     0               0       0.0062322    0.00623  0.00%     -    0s
+
+Explored 1 nodes (7 simplex iterations) in 0.07 seconds (0.03 work units)
+Thread count was 256 (of 256 available processors)
+
+Solution count 2: 0.00623222 0.00652833 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.232222222220e-03, best bound 6.232222222220e-03, gap 0.0000%
+
+Wrote result file '/tmp/3b22eb25726a4845894a40d768899fe1-pulp.sol'
+
+Set parameter WLSAccessID
+Set parameter WLSSecret
+Set parameter LicenseID to value 2562092
+Set parameter TimeLimit to value 1200
+Set parameter LogFile to value "gurobi.log"
+Set parameter Threads to value 256
+Using license file /home/vincent.opitz/master-thesis/gurobi1103/gurobi.lic
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+
+Gurobi Optimizer version 11.0.3 build v11.0.3rc0 (linux64 - "Debian GNU/Linux 12 (bookworm)")
+Copyright (c) 2024, Gurobi Optimization, LLC
+
+Read LP format model from file /tmp/738c184307fa451ab36aea6a5883c50d-pulp.lp
+Reading time = 0.01 seconds
+OBJ: 2494 rows, 1100 columns, 5976 nonzeros
+
+CPU model: AMD EPYC 7742 64-Core Processor, instruction set [SSE2|AVX|AVX2]
+Thread count: 128 physical cores, 256 logical processors, using up to 256 threads
+
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+Optimize a model with 2494 rows, 1100 columns and 5976 nonzeros
+Model fingerprint: 0x57df013f
+Variable types: 0 continuous, 1100 integer (1000 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e-03, 2e-02]
+  Bounds range     [1e+00, 3e+00]
+  RHS range        [1e+00, 2e+02]
+Presolve removed 2181 rows and 788 columns
+Presolve time: 0.02s
+Presolved: 313 rows, 312 columns, 1107 nonzeros
+Variable types: 0 continuous, 312 integer (289 binary)
+Found heuristic solution: objective 0.0427296
+Found heuristic solution: objective 0.0162725
+
+Root relaxation: objective 4.890451e-03, 161 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.00489    0   86    0.01627    0.00489  69.9%     -    0s
+     0     0    0.00491    0   59    0.01627    0.00491  69.8%     -    0s
+H    0     0                       0.0159883    0.00491  69.3%     -    0s
+H    0     0                       0.0136704    0.00491  64.1%     -    0s
+H    0     0                       0.0097925    0.00491  49.8%     -    0s
+     0     0    0.00507    0   52    0.00979    0.00507  48.2%     -    0s
+     0     0    0.00687    0   13    0.00979    0.00687  29.8%     -    0s
+
+Cutting planes:
+  Cover: 1
+  Clique: 2
+  MIR: 1
+  Zero half: 2
+  RLT: 2
+
+Explored 1 nodes (212 simplex iterations) in 0.24 seconds (0.02 work units)
+Thread count was 256 (of 256 available processors)
+
+Solution count 8: 0.0097925 0.0097925 0.0136704 ... 0.0427296
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 9.792500000000e-03, best bound 9.792500000000e-03, gap 0.0000%
+
+Wrote result file '/tmp/738c184307fa451ab36aea6a5883c50d-pulp.sol'
+
+Set parameter WLSAccessID
+Set parameter WLSSecret
+Set parameter LicenseID to value 2562092
+Set parameter TimeLimit to value 1200
+Set parameter LogFile to value "gurobi.log"
+Set parameter Threads to value 256
+Using license file /home/vincent.opitz/master-thesis/gurobi1103/gurobi.lic
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+
+Gurobi Optimizer version 11.0.3 build v11.0.3rc0 (linux64 - "Debian GNU/Linux 12 (bookworm)")
+Copyright (c) 2024, Gurobi Optimization, LLC
+
+Read LP format model from file /tmp/5f9cecdb5e2442769ce8b19d00db83cb-pulp.lp
+Reading time = 0.01 seconds
+OBJ: 2544 rows, 1122 columns, 6096 nonzeros
+
+CPU model: AMD EPYC 7742 64-Core Processor, instruction set [SSE2|AVX|AVX2]
+Thread count: 128 physical cores, 256 logical processors, using up to 256 threads
+
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+Optimize a model with 2544 rows, 1122 columns and 6096 nonzeros
+Model fingerprint: 0x438c9b66
+Variable types: 0 continuous, 1122 integer (1020 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e-03, 2e-02]
+  Bounds range     [1e+00, 5e+00]
+  RHS range        [1e+00, 2e+02]
+Presolve removed 2227 rows and 806 columns
+Presolve time: 0.03s
+Presolved: 317 rows, 316 columns, 1123 nonzeros
+Variable types: 0 continuous, 316 integer (293 binary)
+Found heuristic solution: objective 0.0611321
+Found heuristic solution: objective 0.0248033
+
+Root relaxation: objective 9.010217e-03, 166 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.00901    0   94    0.02480    0.00901  63.7%     -    0s
+     0     0    0.00901    0   90    0.02480    0.00901  63.7%     -    0s
+H    0     0                       0.0183988    0.00901  51.0%     -    0s
+     0     0    0.01158    0   32    0.01840    0.01158  37.0%     -    0s
+H    0     0                       0.0152400    0.01224  19.7%     -    0s
+     0     0    0.01524    0   29    0.01524    0.01524  0.00%     -    0s
+
+Cutting planes:
+  Gomory: 1
+  Clique: 14
+  Flow cover: 6
+  Zero half: 1
+  RLT: 14
+
+Explored 1 nodes (202 simplex iterations) in 0.10 seconds (0.03 work units)
+Thread count was 256 (of 256 available processors)
+
+Solution count 4: 0.01524 0.0183988 0.0248033 0.0611321 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.524000000000e-02, best bound 1.524000000000e-02, gap 0.0000%
+
+Wrote result file '/tmp/5f9cecdb5e2442769ce8b19d00db83cb-pulp.sol'
+
+Set parameter WLSAccessID
+Set parameter WLSSecret
+Set parameter LicenseID to value 2562092
+Set parameter TimeLimit to value 1200
+Set parameter LogFile to value "gurobi.log"
+Set parameter Threads to value 256
+Using license file /home/vincent.opitz/master-thesis/gurobi1103/gurobi.lic
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+
+Gurobi Optimizer version 11.0.3 build v11.0.3rc0 (linux64 - "Debian GNU/Linux 12 (bookworm)")
+Copyright (c) 2024, Gurobi Optimization, LLC
+
+Read LP format model from file /tmp/c6c966341c7f4960bc2b23482313caa0-pulp.lp
+Reading time = 0.01 seconds
+OBJ: 2469 rows, 1089 columns, 5916 nonzeros
+
+CPU model: AMD EPYC 7742 64-Core Processor, instruction set [SSE2|AVX|AVX2]
+Thread count: 128 physical cores, 256 logical processors, using up to 256 threads
+
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+Optimize a model with 2469 rows, 1089 columns and 5916 nonzeros
+Model fingerprint: 0xe38d1b7d
+Variable types: 0 continuous, 1089 integer (1089 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [3e-03, 2e-02]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+02]
+Presolve removed 2376 rows and 950 columns
+Presolve time: 0.03s
+Presolved: 93 rows, 139 columns, 459 nonzeros
+Variable types: 0 continuous, 139 integer (139 binary)
+Found heuristic solution: objective 0.0062322
+
+Root relaxation: cutoff, 14 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0     cutoff    0         0.00623    0.00623  0.00%     -    0s
+
+Explored 1 nodes (14 simplex iterations) in 0.06 seconds (0.02 work units)
+Thread count was 256 (of 256 available processors)
+
+Solution count 1: 0.00623222 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.232222222220e-03, best bound 6.232222222220e-03, gap 0.0000%
+
+Wrote result file '/tmp/c6c966341c7f4960bc2b23482313caa0-pulp.sol'
+
+Set parameter WLSAccessID
+Set parameter WLSSecret
+Set parameter LicenseID to value 2562092
+Set parameter TimeLimit to value 1200
+Set parameter LogFile to value "gurobi.log"
+Set parameter Threads to value 256
+Using license file /home/vincent.opitz/master-thesis/gurobi1103/gurobi.lic
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+
+Gurobi Optimizer version 11.0.3 build v11.0.3rc0 (linux64 - "Debian GNU/Linux 12 (bookworm)")
+Copyright (c) 2024, Gurobi Optimization, LLC
+
+Read LP format model from file /tmp/3335faa6d52c4343a3a5bdbe4a88cf4d-pulp.lp
+Reading time = 0.01 seconds
+OBJ: 2519 rows, 1111 columns, 6036 nonzeros
+
+CPU model: AMD EPYC 7742 64-Core Processor, instruction set [SSE2|AVX|AVX2]
+Thread count: 128 physical cores, 256 logical processors, using up to 256 threads
+
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+Optimize a model with 2519 rows, 1111 columns and 6036 nonzeros
+Model fingerprint: 0x0b56f522
+Variable types: 0 continuous, 1111 integer (1010 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e-03, 2e-02]
+  Bounds range     [1e+00, 3e+00]
+  RHS range        [1e+00, 2e+02]
+Presolve removed 2199 rows and 792 columns
+Presolve time: 0.02s
+Presolved: 320 rows, 319 columns, 1129 nonzeros
+Variable types: 0 continuous, 319 integer (295 binary)
+Found heuristic solution: objective 0.0433425
+Found heuristic solution: objective 0.0165321
+
+Root relaxation: objective 4.890437e-03, 156 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.00489    0   91    0.01653    0.00489  70.4%     -    0s
+     0     0    0.00492    0   60    0.01653    0.00492  70.3%     -    0s
+H    0     0                       0.0129513    0.00492  62.0%     -    0s
+     0     0    0.00492    0   60    0.01295    0.00492  62.0%     -    0s
+     0     0    0.00696    0   13    0.01295    0.00696  46.2%     -    0s
+H    0     0                       0.0101792    0.00696  31.6%     -    0s
+H    0     0                       0.0097925    0.00696  28.9%     -    0s
+
+Cutting planes:
+  Gomory: 1
+  Cover: 1
+  Clique: 2
+  MIR: 2
+  StrongCG: 1
+  Zero half: 3
+  RLT: 2
+
+Explored 1 nodes (238 simplex iterations) in 0.28 seconds (0.03 work units)
+Thread count was 256 (of 256 available processors)
+
+Solution count 6: 0.0097925 0.0101792 0.0129513 ... 0.0433425
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 9.792500000000e-03, best bound 9.792500000000e-03, gap 0.0000%
+
+Wrote result file '/tmp/3335faa6d52c4343a3a5bdbe4a88cf4d-pulp.sol'
+
+Set parameter WLSAccessID
+Set parameter WLSSecret
+Set parameter LicenseID to value 2562092
+Set parameter TimeLimit to value 1200
+Set parameter LogFile to value "gurobi.log"
+Set parameter Threads to value 256
+Using license file /home/vincent.opitz/master-thesis/gurobi1103/gurobi.lic
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+
+Gurobi Optimizer version 11.0.3 build v11.0.3rc0 (linux64 - "Debian GNU/Linux 12 (bookworm)")
+Copyright (c) 2024, Gurobi Optimization, LLC
+
+Read LP format model from file /tmp/14aeff28e5bf49f98fe0267ea952d0b7-pulp.lp
+Reading time = 0.01 seconds
+OBJ: 2569 rows, 1133 columns, 6156 nonzeros
+
+CPU model: AMD EPYC 7742 64-Core Processor, instruction set [SSE2|AVX|AVX2]
+Thread count: 128 physical cores, 256 logical processors, using up to 256 threads
+
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+Optimize a model with 2569 rows, 1133 columns and 6156 nonzeros
+Model fingerprint: 0x026b6b1e
+Variable types: 0 continuous, 1133 integer (1030 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e-03, 2e-02]
+  Bounds range     [1e+00, 5e+00]
+  RHS range        [1e+00, 2e+02]
+Presolve removed 2245 rows and 810 columns
+Presolve time: 0.03s
+Presolved: 324 rows, 323 columns, 1145 nonzeros
+Variable types: 0 continuous, 323 integer (299 binary)
+Found heuristic solution: objective 0.0603317
+Found heuristic solution: objective 0.0250938
+
+Root relaxation: objective 8.992518e-03, 169 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.00899    0   98    0.02509    0.00899  64.2%     -    0s
+     0     0    0.00902    0   91    0.02509    0.00902  64.1%     -    0s
+H    0     0                       0.0160617    0.00902  43.9%     -    0s
+     0     0    0.01172    0   32    0.01606    0.01172  27.1%     -    0s
+     0     0    0.01172    0   20    0.01606    0.01172  27.1%     -    0s
+H    0     0                       0.0152400    0.01172  23.1%     -    0s
+     0     0    0.01348    0   15    0.01524    0.01348  11.5%     -    0s
+     0     0    0.01450    0   21    0.01524    0.01450  4.83%     -    0s
+     0     0     cutoff    0         0.01524    0.01524  0.00%     -    0s
+
+Cutting planes:
+  Gomory: 4
+  Cover: 3
+  Clique: 7
+  MIR: 2
+  Flow cover: 11
+  Zero half: 3
+  RLT: 2
+
+Explored 1 nodes (279 simplex iterations) in 0.28 seconds (0.03 work units)
+Thread count was 256 (of 256 available processors)
+
+Solution count 5: 0.01524 0.0160617 0.0160617 ... 0.0603317
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.524000000000e-02, best bound 1.524000000000e-02, gap 0.0000%
+
+Wrote result file '/tmp/14aeff28e5bf49f98fe0267ea952d0b7-pulp.sol'
+
+Set parameter WLSAccessID
+Set parameter WLSSecret
+Set parameter LicenseID to value 2562092
+Set parameter TimeLimit to value 1200
+Set parameter LogFile to value "gurobi.log"
+Set parameter Threads to value 256
+Using license file /home/vincent.opitz/master-thesis/gurobi1103/gurobi.lic
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+
+Gurobi Optimizer version 11.0.3 build v11.0.3rc0 (linux64 - "Debian GNU/Linux 12 (bookworm)")
+Copyright (c) 2024, Gurobi Optimization, LLC
+
+Read LP format model from file /tmp/f0237f86a0a0491ab782383c9a19d031-pulp.lp
+Reading time = 0.01 seconds
+OBJ: 2494 rows, 1100 columns, 5976 nonzeros
+
+CPU model: AMD EPYC 7742 64-Core Processor, instruction set [SSE2|AVX|AVX2]
+Thread count: 128 physical cores, 256 logical processors, using up to 256 threads
+
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+Optimize a model with 2494 rows, 1100 columns and 5976 nonzeros
+Model fingerprint: 0x7d64b2f4
+Variable types: 0 continuous, 1100 integer (1100 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [3e-03, 2e-02]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 2e+02]
+Found heuristic solution: objective 0.0431489
+Presolve removed 2406 rows and 967 columns
+Presolve time: 0.04s
+Presolved: 88 rows, 133 columns, 434 nonzeros
+Found heuristic solution: objective 0.0062322
+Variable types: 0 continuous, 133 integer (133 binary)
+
+Explored 1 nodes (0 simplex iterations) in 0.24 seconds (0.02 work units)
+Thread count was 256 (of 256 available processors)
+
+Solution count 2: 0.00623222 0.0431489 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.232222222220e-03, best bound 6.232222222220e-03, gap 0.0000%
+
+Wrote result file '/tmp/f0237f86a0a0491ab782383c9a19d031-pulp.sol'
+
+Set parameter WLSAccessID
+Set parameter WLSSecret
+Set parameter LicenseID to value 2562092
+Set parameter TimeLimit to value 1200
+Set parameter LogFile to value "gurobi.log"
+Set parameter Threads to value 256
+Using license file /home/vincent.opitz/master-thesis/gurobi1103/gurobi.lic
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+
+Gurobi Optimizer version 11.0.3 build v11.0.3rc0 (linux64 - "Debian GNU/Linux 12 (bookworm)")
+Copyright (c) 2024, Gurobi Optimization, LLC
+
+Read LP format model from file /tmp/5ecccd61174f4d46999f828052312324-pulp.lp
+Reading time = 0.01 seconds
+OBJ: 2544 rows, 1122 columns, 6096 nonzeros
+
+CPU model: AMD EPYC 7742 64-Core Processor, instruction set [SSE2|AVX|AVX2]
+Thread count: 128 physical cores, 256 logical processors, using up to 256 threads
+
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+Optimize a model with 2544 rows, 1122 columns and 6096 nonzeros
+Model fingerprint: 0x3a539694
+Variable types: 0 continuous, 1122 integer (1020 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e-03, 2e-02]
+  Bounds range     [1e+00, 3e+00]
+  RHS range        [1e+00, 2e+02]
+Presolve removed 2222 rows and 801 columns
+Presolve time: 0.02s
+Presolved: 322 rows, 321 columns, 1137 nonzeros
+Variable types: 0 continuous, 321 integer (297 binary)
+Found heuristic solution: objective 0.0452908
+Found heuristic solution: objective 0.0167917
+
+Root relaxation: objective 4.888720e-03, 160 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.00489    0   96    0.01679    0.00489  70.9%     -    0s
+     0     0    0.00491    0   59    0.01679    0.00491  70.7%     -    0s
+H    0     0                       0.0154288    0.00491  68.2%     -    0s
+H    0     0                       0.0126808    0.00491  61.3%     -    0s
+H    0     0                       0.0107546    0.00491  54.3%     -    0s
+     0     0    0.00491    0   59    0.01075    0.00491  54.3%     -    0s
+     0     0    0.00706    0   27    0.01075    0.00706  34.4%     -    0s
+     0     0    0.00710    0   12    0.01075    0.00710  34.0%     -    0s
+H    0     0                       0.0097925    0.00710  27.5%     -    0s
+     0     0    0.00915    0   10    0.00979    0.00915  6.51%     -    0s
+
+Cutting planes:
+  Gomory: 1
+  Implied bound: 1
+  Clique: 2
+  MIR: 1
+  GUB cover: 1
+  RLT: 1
+
+Explored 1 nodes (223 simplex iterations) in 0.28 seconds (0.03 work units)
+Thread count was 256 (of 256 available processors)
+
+Solution count 9: 0.0097925 0.0107546 0.0107546 ... 0.0452908
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 9.792500000000e-03, best bound 9.792500000000e-03, gap 0.0000%
+
+Wrote result file '/tmp/5ecccd61174f4d46999f828052312324-pulp.sol'
+
+Set parameter WLSAccessID
+Set parameter WLSSecret
+Set parameter LicenseID to value 2562092
+Set parameter TimeLimit to value 1200
+Set parameter LogFile to value "gurobi.log"
+Set parameter Threads to value 256
+Using license file /home/vincent.opitz/master-thesis/gurobi1103/gurobi.lic
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+
+Gurobi Optimizer version 11.0.3 build v11.0.3rc0 (linux64 - "Debian GNU/Linux 12 (bookworm)")
+Copyright (c) 2024, Gurobi Optimization, LLC
+
+Read LP format model from file /tmp/17435b01469c438eb0013a0f930bbccd-pulp.lp
+Reading time = 0.01 seconds
+OBJ: 2594 rows, 1144 columns, 6216 nonzeros
+
+CPU model: AMD EPYC 7742 64-Core Processor, instruction set [SSE2|AVX|AVX2]
+Thread count: 128 physical cores, 256 logical processors, using up to 256 threads
+
+Academic license 2562092 - for non-commercial use only - registered to vi___@student.hpi.uni-potsdam.de
+Optimize a model with 2594 rows, 1144 columns and 6216 nonzeros
+Model fingerprint: 0x1a5c0caa
+Variable types: 0 continuous, 1144 integer (1040 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 2e+02]
+  Objective range  [2e-03, 2e-02]
+  Bounds range     [1e+00, 5e+00]
+  RHS range        [1e+00, 2e+02]
+Presolve removed 2268 rows and 819 columns
+Presolve time: 0.03s
+Presolved: 326 rows, 325 columns, 1153 nonzeros
+Variable types: 0 continuous, 325 integer (301 binary)
+Found heuristic solution: objective 0.0599554
+Found heuristic solution: objective 0.0253842
+
+Root relaxation: objective 8.986463e-03, 173 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.00899    0  103    0.02538    0.00899  64.6%     -    0s
+     0     0    0.00900    0   95    0.02538    0.00900  64.5%     -    0s
+H    0     0                       0.0152400    0.00900  40.9%     -    0s
+     0     0    0.01260    0   27    0.01524    0.01260  17.3%     -    0s
+     0     0 infeasible    0         0.01524    0.01524  0.00%     -    0s
+
+Explored 1 nodes (220 simplex iterations) in 0.60 seconds (0.03 work units)
+Thread count was 256 (of 256 available processors)
+
+Solution count 4: 0.01524 0.0187363 0.0253842 0.0599554 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.524000000000e-02, best bound 1.524000000000e-02, gap 0.0000%
+
+Wrote result file '/tmp/17435b01469c438eb0013a0f930bbccd-pulp.sol'
+
+Start Experiments results/simulation/different_lengths/suspend-resume_constant-from-periodic-phases_2_1800_200_48
+Started Loading Tasks for different_lengths
+job_args: {'startup': [{'name': 'startup', 'duration': 1800, 'power': 200}], 'work': [{'name': 'high', 'power': 200, 'duration': 1800}, {'name': 'low', 'power': 100, 'duration': 3600}]}
+job_args: {'startup': [{'name': 'startup', 'duration': 1800, 'power': 200}], 'work': [{'name': 'high', 'power': 200, 'duration': 1800}, {'name': 'low', 'power': 100, 'duration': 3600}]}
+job_args: {'startup': [{'name': 'startup', 'duration': 1800, 'power': 200}], 'work': [{'name': 'high', 'power': 200, 'duration': 1800}, {'name': 'low', 'power': 100, 'duration': 3600}]}
+job_args: {'startup': [{'name': 'startup', 'duration': 1800, 'power': 200}], 'work': [{'name': 'high', 'power': 200, 'duration': 1800}, {'name': 'low', 'power': 100, 'duration': 3600}]}
+job_args: {'startup': [{'name': 'startup', 'duration': 1800, 'power': 200}], 'work': [{'name': 'high', 'power': 200, 'duration': 1800}, {'name': 'low', 'power': 100, 'duration': 3600}]}
+job_args: {'startup': [{'name': 'startup', 'duration': 1800, 'power': 200}], 'work': [{'name': 'high', 'power': 200, 'duration': 1800}, {'name': 'low', 'power': 100, 'duration': 3600}]}
+job_args: {'startup': [{'name': 'startup', 'duration': 1800, 'power': 200}], 'work': [{'name': 'high', 'power': 200, 'duration': 1800}, {'name': 'low', 'power': 100, 'duration': 3600}]}
+job_args: {'startup': [{'name': 'startup', 'duration': 1800, 'power': 200}], 'work': [{'name': 'high', 'power': 200, 'duration': 1800}, {'name': 'low', 'power': 100, 'duration': 3600}]}
+job_args: {'startup': [{'name': 'startup', 'duration': 1800, 'power': 200}], 'work': [{'name': 'high', 'power': 200, 'duration': 1800}, {'name': 'low', 'power': 100, 'duration': 3600}]}
+Finding scheduler for oracle suspend-resume with dynamic power
+scaled deadlines is: 98, spt: 1800
+Status: Optimal
+scaled deadlines is: 100, spt: 1800
+Status: Optimal
+scaled deadlines is: 102, spt: 1800
+Status: Optimal
+scaled deadlines is: 99, spt: 1800
+Status: Optimal
+scaled deadlines is: 101, spt: 1800
+Status: Optimal
+scaled deadlines is: 103, spt: 1800
+Status: Optimal
+scaled deadlines is: 100, spt: 1800
+Status: Optimal
+scaled deadlines is: 102, spt: 1800
+Status: Optimal
+scaled deadlines is: 104, spt: 1800
+Status: Optimal
+Saving details to results/simulation/different_lengths/suspend-resume_constant-from-periodic-phases_2_1800_200_48_details
+Saving runtime to results/simulation/different_lengths/runtime-suspend-resume-7000-oracle-AU-SA-0-48.csv
+Saving Results to results/simulation/different_lengths/suspend-resume_constant-from-periodic-phases_2_1800_200_48
+Finish Experiments different_lengths - AU-SA-suspend-resume-oracle-48-True, and 0 reserved
+Executing: jobs/job-80.sh
