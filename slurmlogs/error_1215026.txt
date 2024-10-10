@@ -1,1 +1,0 @@
-slurmstepd-cx17: error: *** JOB 1215026 ON cx17 CANCELLED AT 2024-10-08T11:51:53 DUE TO TIME LIMIT ***

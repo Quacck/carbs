@@ -1,1 +1,0 @@
-slurmstepd-cx22: error: *** JOB 1211208 ON cx22 CANCELLED AT 2024-10-03T16:19:56 ***
