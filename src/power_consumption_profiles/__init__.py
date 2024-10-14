@@ -3,7 +3,7 @@ from typing import List, Tuple, TypedDict, Any, Iterable, NotRequired
 from functools import reduce
 import numpy as np
 
-class ModelParameters(TypedDict):
+class Stawp(TypedDict):
     startup: List[Phase]
     work: List[Phase]
     
@@ -14,7 +14,7 @@ class Phase(TypedDict):
     is_checkpoint: NotRequired[bool]
 
 class PowerFunction:
-    def __init__(self, phases: ModelParameters, name: str | None = None):
+    def __init__(self, phases: Stawp, name: str | None = None):
         self.name = name
         self.phases = phases
         self.duration_startup: float = np.sum([phase['duration'] for phase in phases['startup']])
@@ -64,7 +64,7 @@ class PowerFunction:
         return 0
 
 class PeriodicPowerFunction(PowerFunction):
-    def __init__(self, phases: ModelParameters, name: str | None = None, length: int = None):
+    def __init__(self, phases: Stawp, name: str | None = None, length: int = None):
         # we need to repeat the provided phases until they add up to the specified length
 
         if (length is None):
@@ -84,7 +84,7 @@ class PeriodicPowerFunction(PowerFunction):
             work_duration_added += next_phase_adjusted['duration']
             adjusted_work += [next_phase_adjusted]
 
-        adjusted_phases: ModelParameters = {
+        adjusted_phases: Stawp = {
             'startup': phases['startup'],
             'work': adjusted_work
         }
@@ -111,7 +111,7 @@ def get_power_policy(name: str, args: Any) -> PowerFunction: # type: ignore[no-u
         case 'constant':
             # this would be the default GAIA job
             return PowerFunction({'startup': [], 'work': [Phase(name='Constant', duration=float('inf'), power=args)]}, 'Constant')
-        case 'constant-from-phases':
+        case 'constant-from-stawp':
             # this would be the default GAIA job
             return phases_to_constant_via_average(args)
         case 'constant-from-periodic-phases':
@@ -133,7 +133,7 @@ def get_power_policy(name: str, args: Any) -> PowerFunction: # type: ignore[no-u
 
 # This is based on the phases in the power-measurements/evaluate.ipynb
 # with a little cleanup (shortening the names and truncating the durations to 2 sig. digits)
-roberta_phases_spec: ModelParameters = {
+roberta_phases_spec: Stawp = {
     'startup': [
         {'name': 'Start', 'duration': 5.349, 'power': 59.9},
         {'name': 'Finish Imports', 'duration': 12.36, 'power': 53.77},
@@ -159,11 +159,11 @@ roberta_phases_spec: ModelParameters = {
     ]
 }
 
-def create_phases_profile(modelParameters: ModelParameters) -> PowerFunction:
+def create_phases_profile(modelParameters: Stawp) -> PowerFunction:
     return PowerFunction(modelParameters, 'Phases')
 
 
-def create_perioic_phases_profile(modelParameters: ModelParameters, length: int) -> PeriodicPowerFunction:
+def create_perioic_phases_profile(modelParameters: Stawp, length: int) -> PeriodicPowerFunction:
     return PeriodicPowerFunction(modelParameters, 'Perioic', length)
 
 def reduce_phase(total: Tuple[float, float], phase: Phase) -> Tuple[float, float]:
@@ -184,7 +184,7 @@ def phases_to_constant_via_average(phases: List[Phase]) -> PowerFunction:
         'work' : [{'name': 'Constant', 'duration': total_duration, 'power': average_power}]
     }, 'Constant from Phase')
 
-def periodic_phases_to_constant_via_average(modelParameters: ModelParameters, length: int) -> PowerFunction:
+def periodic_phases_to_constant_via_average(modelParameters: Stawp, length: int) -> PowerFunction:
     model = create_perioic_phases_profile(modelParameters, length)
 
     total_power = 0.0
@@ -206,7 +206,7 @@ def periodic_phases_to_constant_via_average(modelParameters: ModelParameters, le
 
 
 def create_profile_ml(params: MachineLearningParameters) -> PowerFunction:
-    modelParameters: ModelParameters = {
+    modelParameters: Stawp = {
         'startup': [Phase(name='Startup', duration=params['start_duration'], power=params['start_power'])],
         'work': [
             Phase(name='Train', duration=params['training_duration'], power=params['training_power']),
