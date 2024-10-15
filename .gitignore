@@ -165,7 +165,5 @@ cython_debug/
 
 ### GAIA
 .vscode/*
-results/*
 *.png
 .DS_STORE
-*.pdf

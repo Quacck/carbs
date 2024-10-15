@@ -1,0 +1,3 @@
+ID,arrival_time,length,cpus,length_class,resource_class,carbon_cost,dollar_cost,start_time,waiting_time,exit_time,reason
+0,0,3600,1,0-2,1,6.113999999999999,0.0624,10800,10800,14400,completed
+-1,0,0,0,,,0.0,0.0,0,0,0,
