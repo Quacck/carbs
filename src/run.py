@@ -201,14 +201,10 @@ def main() -> None:
         dest="scheduling_policy",
         choices=[
             "carbon",
-            # "carbon-spot",
             "carbon-cost",
-            # "carbon-cost-spot",
             "cost",
             "suspend-resume",
-            # "suspend-resume-spot",
             "suspend-resume-threshold",
-            # "suspend-resume-spot-threshold",
         ],
     )
 
